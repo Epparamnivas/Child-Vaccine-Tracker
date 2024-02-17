@@ -1,57 +1,59 @@
 <%- include('layouts/header'); -%>
-<div class="login-container">
-   
-    <form action="/login" method="post" id="loginForm">   
-         
-        <h2>Login as Parent</h2>
-        <div class="form-elements">
-            <label for="userName">User Name</label>
-            <input type="text" id="userName" name="userName">
-        </div>
-        <div class="form-elements">
-            <label for="Email"> Password</label>
-            <input type="password" id="password" name="password" >
-        </div>   
-        <div class="button">    
-        <button type="submit" value="submit" >Submit</button>      
-        </div>
-       
-    </form>
+
+    <%- include('layouts/nav'); -%>
+        <div class="login-container">
+
+            <form action="/login" method="post" id="loginForm">
+
+                <h2>Login as Parent</h2>
+                <div class="form-elements">
+                    <label for="userName">User Name</label>
+                    <input type="text" id="userName" name="userName">
+                </div>
+                <div class="form-elements">
+                    <label for="Email"> Password</label>
+                    <input type="password" id="password" name="password">
+                </div>
+                <div class="button">
+                    <button type="submit" value="submit">Submit</button>
+                </div>
+
+            </form>
 
 
-    
-</div>
 
-<div class="login-container">
-   
-    <form action="/login" method="post" id="loginForm">   
-         
-        <h2>Login as Adult</h2>
-        <div class="form-elements">
-            <label for="userName">User Name</label>
-            <input type="text" id="userName" name="userName">
         </div>
-        <div class="form-elements">
-            <label for="Email"> Password</label>
-            <input type="password" id="password" name="password" >
-        </div>   
-        <div class="button">    
-        <button type="submit" value="submit" >Submit</button>      
-        </div>
-       
-    </form>
-    
-</div>
 
-<p id="errors">
-    <div id="errors">
-        <% if(typeof(errors) !='undefined' ) { for(let error of errors) { %>
-            <p class="errors">
-                <%= error.msg %>
-            </p>
-            <% } %>
+        <div class="login-container">
+
+            <form action="/login" method="post" id="loginForm">
+
+                <h2>Login as Adult</h2>
+                <div class="form-elements">
+                    <label for="userName">User Name</label>
+                    <input type="text" id="userName" name="userName">
+                </div>
+                <div class="form-elements">
+                    <label for="Email"> Password</label>
+                    <input type="password" id="password" name="password">
+                </div>
+                <div class="button">
+                    <button type="submit" value="submit">Submit</button>
+                </div>
+
+            </form>
+
+        </div>
+
+        <p id="errors">
+        <div id="errors">
+            <% if(typeof(errors) !='undefined' ) { for(let error of errors) { %>
+                <p class="errors">
+                    <%= error.msg %>
+                </p>
                 <% } %>
-    </div>
-    </p>
+                    <% } %>
+        </div>
+        </p>
 
-    <%- include('layouts/footer'); -%>
+        <%- include('layouts/footer'); -%>

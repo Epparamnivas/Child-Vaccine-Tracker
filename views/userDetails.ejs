@@ -1,0 +1,28 @@
+<%- include('layouts/header'); -%>
+
+    <%- include('layouts/nav'); -%>
+        <section>
+            <div id="editPages-container">
+                <form method="post" action="/allOrders" id="allOrdersForm">
+                    <h2>All Orders</h2>
+                    <div class="formField">
+                        <table>
+                            <thead>
+
+                            </thead>
+                            <tbody>
+                                <% orders.forEach((x)=> { %>
+                                    <tr>
+
+                                        <td> <a href="/delete/<%= x._id%>">Delete</a> </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <%- include('layouts/footer'); -%>
