@@ -1,30 +1,45 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Vaccination Tracker</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">  
-    <link href="https://fonts.googleapis.com/css?family=Bilbo+Swash+Caps" rel="stylesheet"> 
-    <link href="https://fonts.googleapis.com/css?family=Kalam" rel="stylesheet"> 
-    <link rel="stylesheet" type="text/css" href="/css/juiceShop.css">
-    <script src="https://cdn.tiny.cloud/1/e95cnzodq6qskb9j0ee5wjvbo0vjw6sfxz7s9ncewyvmlmw7/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-    <script>
-      tinymce.init({selector: 'textarea', 
-  plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline striketrhough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap',
-  
-  });
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vaccination Tracking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Bilbo+Swash+Caps" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Kalam" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/css/vaccinationTracker.css">
+  <script src="https://cdn.tiny.cloud/1/e95cnzodq6qskb9j0ee5wjvbo0vjw6sfxz7s9ncewyvmlmw7/tinymce/6/tinymce.min.js"
+    referrerpolicy="origin"></script>
+  <script>
+    tinymce.init({
+      selector: 'textarea',
+      plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+      toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline striketrhough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap',
+
+    });
   </script>
-    <base href="/"> 
-</head> 
+  <base href="/">
+</head>
+
 <body>
-    <div class="container">    
-        <div class="image-header">      
-            <img src="/images/Logo.png">
-            </div>
-      <div class="tag-line">
-        <strong><em>Child Vaccination Tracker</em></strong>
-      </div>
+  <div class="container">
+    <div class="image-header">
+      <img src="/images/Logo.png">
     </div>
-  
+    <div class="tag-line">
+      <h1>Vaccination Tracker</h1>
+    </div>
+  </div>
+
+  <div class="navigation-bar">
+    <nav>
+        <ul>
+            <li><a href="/" class="homebutton">Home </a>
+            <li><a href="InnerPage.html">Vaccination Details</a></li>
+            <li><a href="https://www.ontario.ca/page/housing-in-ontario">About Us</a></li>
+            <li><a href="https://cohousing.ca/communities/on/cohousing-toronto">Contact Us</a></li>
+            <li><a href="/login">Login</a></li>
+        </ul>
+    </nav>
+</div>
