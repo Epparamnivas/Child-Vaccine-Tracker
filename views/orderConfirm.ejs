@@ -8,70 +8,12 @@
         <form action="/orderConfirm" method="post" onsubmit="return onSubmit()" name="frmUserDetails">
             <section>
         <div>
-            <h4 style="text-align: center;"><label style="display: inline;font-size: 30px">Confrim Order</label>
+            <h4 style="text-align: center;"><label style="display: inline;font-size: 30px">Review User Details</label>
             </h4>
         </div>
         <div>
             <table>
-                <tr>
-                    <strong>
-                        <th>Student Name:</th>
-                    </strong>
-                    <td>
-                        <%= studentname %>
-                    </td>
-                </tr>
-                <tr>
-                    <strong>
-                        <th>Student Id:</th>
-                    </strong>
-                    <td>
-                        <%= studentid %>
-                    </td>
-                </tr>
-                <tr>
-                    <strong>
-                        <th>Juices:</th>
-                    </strong>
-                    <td>
-
-                        
-                        <%= mjuice %><br>
-                      
-                            <%= bjuice %><br>
-                          
-                                <%= ajuice %><br>
-                             
-                    
-                    </td>          
-
-                </tr>
-                <tr>
-                    <strong>
-                        <th>SubTotal:</th>
-                    </strong>
-                    <td>
-                        <%= subtotal.toFixed(2) %>
-                    </td>
-                </tr>
-                <tr>
-                    <strong>
-                        <th>Tax:</th>
-                    </strong>
-                    <td>
-                        <%= tax.toFixed(2) %>
-                    </td>
-                </tr>
-                <tr>
-                    <strong>
-                        <th>Total:</th>
-                    </strong>
-                    <td>
-                        <%= (subtotal+tax).toFixed(2) %>
-                    </td>
-                </tr>
-
-
+                
             </table>
 
         </div>

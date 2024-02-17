@@ -14,21 +14,12 @@
        <div class="formField">
         <table>
             <thead>
-                <th>Student Name</th>   
-                <th>Student Id</th> 
-                <th>Juices</th>                     
-                <th>Sub Total</th>
-                <th>Tax</th>
-                <th>Total</th>              
+
             </thead>
             <tbody>
                 <% orders.forEach((x) => { %>
                     <tr>
-                        <td> <%= x.studentname %> </td>   
-                        <td> <%= x.studentid %> </td>   
-                        <td> <%= x.subtotal.toFixed(2) %> </td>                        
-                        <td> <%= x.tax.toFixed(2) %> </td>  
-                        <td> <%= (x.subtotal+x.tax).toFixed(2) %> </td>   
+
                         <td> <a href="/delete/<%= x._id%>">Delete</a> </td>
                     </tr>
                <% }) %>
