@@ -48,11 +48,18 @@ vaccineTracker.set('view engine', 'ejs');
 
 // Root Page Get Method (First time page load)
 vaccineTracker.get('/', function (req, res) {
-    res.render('orderForm');
+    res.render('Home');
 });
 
-vaccineTracker.get('/orderConfirm', function (req, res) {
-    res.render('orderConfirm',);
+vaccineTracker.get('/vaccinationDetails', function (req, res) {
+    res.render('vaccinationDetails',);
+});
+
+vaccineTracker.get('/aboutUs', function (req, res) {
+    res.render('aboutUs',);
+});
+vaccineTracker.get('/contactUs', function (req, res) {
+    res.render('contactUs',);
 });
 
 // Root Page Post Method (Server Response)
