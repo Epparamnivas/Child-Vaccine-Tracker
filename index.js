@@ -70,15 +70,15 @@ vaccineTracker.post('/', [
     const errors = validationResult(req);
     console.log(errors);
     if (!errors.isEmpty()) {
-        res.render('orderForm', { errors: errors.array() });
+        res.render('Home', { errors: errors.array() });
 
     } else {
-        res.render('orderConfirm', orderDB);
+        res.render('userConfirm', orderDB);
     }
 });
 
-vaccineTracker.post('/orderConfirm', function (req, res) {
-    console.log("OrderData for DB:"+orderDB);
+vaccineTracker.post('/userConfirm', function (req, res) {
+    console.log("User Data for DB:"+orderDB);
     var order = new Order(orderDB);
     order.save().then(function () {
         console.log("Order Saved Successfully !");
@@ -105,12 +105,12 @@ vaccineTracker.get('/logout', (req, res) => {
 
 
 // All  Page
-vaccineTracker.get('/allOrders', (req, res) => {
+vaccineTracker.get('/userDetails', (req, res) => {
     // If Session Exists, Then Access All  Page
     if (req.session.userLoggedIn) {
         Order.find({}).then((orders) => {
             console.log(`orders: ${orders}`);
-            res.render('allOrders', {orders: orders });
+            res.render('userDetails', {orders: orders });
         }).catch(function (err) {
             console.log(`Error: ${err}`);
         });
@@ -149,7 +149,7 @@ vaccineTracker.post('/login', [
             if (admin) {
                 req.session.username = admin.username;
                 req.session.userLoggedIn = true;
-                res.redirect('/allorders');
+                res.redirect('/userDetails');
             } else {
                 res.render('login', { errors: "Sorry Login Failed. Please Try Again!" });
                 console.log(errors);
