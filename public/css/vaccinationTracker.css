@@ -22,8 +22,8 @@ body {
     font-size: x-large;
     font-weight: bold;
     color: #558B2F;
-    display: inline-flex;
-    margin-left: 250px;
+    display: inline;
+    margin-left: 100px;
     margin-top: 60px;
 }
 #editPages-container tr{
@@ -47,13 +47,13 @@ body {
  }
 
 .login-container label{    width: 25%;
-    display: inline-block;
+    display: inline;
     vertical-align: center;
     font-weight: bold;
 }
 
 input {
-    width: 70%;
+    width: auto;
     padding: 12px;
     border: 1px solid #558B2F;
     border-radius: 20px;
@@ -67,6 +67,18 @@ input {
     flex-basis: 100%;
     height: 0;
   }
+
+.login-button{
+    background-color: #0074D9;
+    font-size: 20px;
+    color: #000000;
+    border-radius: 10px;
+}
+
+.login-button:hover{
+    background-color: #0056b3;
+}
+
 
 /*--------------------------------------footer page--------------------------------------*/
   
