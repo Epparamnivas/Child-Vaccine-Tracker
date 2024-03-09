@@ -67,7 +67,7 @@ input {
     height: 0;
   }
 
-/*footer page*/
+/*--------------------------------------footer page--------------------------------------*/
   
 footer {   
     position:fixed;
@@ -88,12 +88,13 @@ footer {
   
 }
 
-/*header of pages*/
+/*--------------------------------------header of pages--------------------------------------*/
+
 .container{
     background-color: beige;
     max-width: 100%;
     text-align: center;
-    height: 10vh;
+    height: 7vh;
     display: flex;
     border-radius: 10px;
     gap: 33%;
@@ -110,20 +111,21 @@ footer {
     margin-top: 25px;
 }
 .image-header>img{
-    height: 79px;
-    width: 85px;
+    height: 109px;
+    width: 115px;
     margin-left: 10px;
 }
 .image-header{
     justify-content: center;
 }
 
-/*navigation bar page*/
+/*--------------------------------------navigation bar page--------------------------------------*/
 
 .navigation-bar nav ul{
-    width: 100%;
+    width: 90%;
     align-items: center;
-    height: auto;  
+    height: auto; 
+    margin-left: 120px; 
     padding: 6px 0 6px 0;
     background-color: burlywood;
     font-size: 20px;
@@ -185,7 +187,9 @@ footer {
         width: 100%;
         color: #558B2F;
      }
-/*Home page*/
+
+
+/*--------------------------------------Home page----------------------------------*/
 
 .itemsContainer {
     margin: 10px auto 120px auto;
@@ -212,7 +216,7 @@ footer {
     font-style: italic;
 }
 
-/*Vaccination Details Page*/
+/*--------------------------------------Vaccination Details Page--------------------------------------*/
 
 .itemsContainerVacc {
     margin: 10px auto 120px auto;
@@ -245,7 +249,7 @@ footer {
 }
 
 
-/*contact us form*/
+/*--------------------------------------contact us form--------------------------------------*/
 .container1 {
     max-width: 90%;
     margin: 0 auto;
