@@ -9,21 +9,22 @@ body {
     font-family: Chakra Petch;
     background-color: beige; 
 }
+
+/*--------------------------------------login page--------------------------------------*/
+.login-area{
+    display: flex;
+}
+
+
 .login-container{   
     border: green;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 8px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Chakra Petch;
     font-size: x-large;
     font-weight: bold;
     color: #558B2F;
-    width: 40%;
-    justify-content: center;
     display: inline-flex;
-    margin-left: 557px;
-    margin-top: 30px;
-    height: 400px;
+    margin-left: 250px;
+    margin-top: 60px;
 }
 #editPages-container tr{
     font-weight: normal;
@@ -47,7 +48,7 @@ body {
 
 .login-container label{    width: 25%;
     display: inline-block;
-    vertical-align: top;
+    vertical-align: center;
     font-weight: bold;
 }
 
@@ -70,7 +71,7 @@ input {
 /*--------------------------------------footer page--------------------------------------*/
   
 footer {   
-    position:fixed;
+    position:relative;
 	text-align: center;
 	color: black;
 	font-weight:bolder;
