@@ -14,10 +14,13 @@ mongoose.connect('mongodb://localhost:27017/vaccineTracker', {
 
 
 // Setup Database Model
-const Order = mongoose.model('Orders', {
+const PDetails = mongoose.model('ParentDetails', {
     fathername: String,
     mothername: String,
     childname: String,
+    childGender: String,
+    childDOB: String,
+    comment: String,
 });
 
 //Setup Admin Database Model
@@ -108,9 +111,9 @@ vaccineTracker.get('/logout', (req, res) => {
 vaccineTracker.get('/userDetails', (req, res) => {
     // If Session Exists, Then Access All  Page
     if (req.session.userLoggedIn) {
-        Order.find({}).then((orders) => {
-            console.log(`orders: ${orders}`);
-            res.render('userDetails', {orders: orders });
+        loginHome.find({}).then((ParentDetails) => {
+            console.log(`ParentDetails: ${ParentDetails}`);
+            res.render('userDetails', {ParentDetails: ParentDetails });
         }).catch(function (err) {
             console.log(`Error: ${err}`);
         });

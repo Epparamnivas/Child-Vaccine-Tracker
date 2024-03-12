@@ -69,14 +69,14 @@ input {
   }
 
 .login-button{
-    background-color: #0074D9;
+    background-color: burlywood;
     font-size: 20px;
     color: #000000;
     border-radius: 10px;
 }
 
 .login-button:hover{
-    background-color: #0056b3;
+    background-color: beige;
 }
 
 
