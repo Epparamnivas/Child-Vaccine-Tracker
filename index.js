@@ -65,6 +65,8 @@ vaccineTracker.get('/contactUs', function (req, res) {
     res.render('contactUs',);
 });
 
+
+
 // Root Page Post Method (Server Response)
 vaccineTracker.post('/', [
     
@@ -111,7 +113,7 @@ vaccineTracker.get('/logout', (req, res) => {
 vaccineTracker.get('/userDetails', (req, res) => {
     // If Session Exists, Then Access All  Page
     if (req.session.userLoggedIn) {
-        loginHome.find({}).then((ParentDetails) => {
+        PDetails.find({}).then((ParentDetails) => {
             console.log(`ParentDetails: ${ParentDetails}`);
             res.render('userDetails', {ParentDetails: ParentDetails });
         }).catch(function (err) {
@@ -127,12 +129,19 @@ vaccineTracker.get('/userDetails', (req, res) => {
 
 
 // Login Page
-vaccineTracker.get('/login', (req, res) => {
-    res.render('login');
+vaccineTracker.get('/login-parent', (req, res) => {
+    res.render('login-parent');
+});
+vaccineTracker.get('/login-adult', (req, res) => {
+    res.render('login-adult');
+});
+vaccineTracker.get('/login-admin', (req, res) => {
+    res.render('login-admin');
 });
 
-// Post Login Page
-vaccineTracker.post('/login', [
+
+// Post Login-admin Page
+vaccineTracker.post('/login-parent', [
     check('userName', 'User Name is required!').notEmpty(),
     check('password', 'Password is required!').notEmpty(),
 ], (req, res) => {
@@ -140,7 +149,7 @@ vaccineTracker.post('/login', [
     console.log(errors);
     if (!errors.isEmpty()) {
         // Display Error Messages
-        res.render('login', { errors: errors.array() });
+        res.render('login-admin', { errors: errors.array() });
     } else {
         console.log(req.body);
         var userName = req.body.userName;
@@ -154,7 +163,7 @@ vaccineTracker.post('/login', [
                 req.session.userLoggedIn = true;
                 res.redirect('/userDetails');
             } else {
-                res.render('login', { errors: "Sorry Login Failed. Please Try Again!" });
+                res.render('login-admin', { errors: "Sorry Login Failed. Please Try Again!" });
                 console.log(errors);
             }
 
