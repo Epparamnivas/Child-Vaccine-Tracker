@@ -144,9 +144,9 @@ footer {
     justify-content: center;
 }
 
-/*--------------------------------------navigation bar page--------------------------------------*/
+/*--------------------------------------navigation bar --------------------------------------*/
 
-.navigation-bar nav ul{
+.navigation-bar ul{
     width: 90%;
     align-items: center;
     height: auto; 
@@ -156,24 +156,24 @@ footer {
     font-size: 20px;
     text-transform: uppercase;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: space-evenly;
     border: 1px solid crimson;
     border-radius: 12px; 
 }
 
-.navigation-bar nav ul li{
+.navigation-bar ul li{
     list-style-type: none;     
 }
 
-.navigation-bar nav ul li a{
+.navigation-bar ul li a{
     text-decoration: none;
     color: black;
     font-weight: bold;
 }
 
-.navigation-bar nav ul li a:hover {
+.navigation-bar ul li a:hover {
     color: beige;
 }
 
@@ -205,7 +205,6 @@ footer {
 
 #login-dropdown ul.dropdown li a {
     display: inline-flex;
-   
     color: #333;
     text-decoration: none;
 }
@@ -311,10 +310,55 @@ footer {
     color: #ffffff;
     border: none;
     padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
 }
-.cta-button:hover {
-    background-color: #0056b3;
+   
+/*--------------------------------------Registration pages--------------------------------------*/
+
+.regContainer {
+    margin: 10px auto 120px auto;
+    border: 2px solid #558B2F;
+    border-radius: 15px;
+    width: 75%;  
+    padding-top: 10px;
+    padding-right: 40px;
+    padding-left: 40px;
+    padding-bottom: 30px;
+    height: 600px;
+    background-color: antiquewhite; 
+}
+
+.regContainer h2{
+    color:#558B2F;
+    text-align: justify;
+    font-style:normal;
+    text-align: center;
+}
+
+.regContainer form{
+    color: black;
+}
+
+.regContainer label {
+    display: inline-flex;
+    text-align: left;
+    margin-right: 5%;
+}
+
+.regContainer  input, select {
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+.regContainer  button {
+    width: 10%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: rgb(15, 1, 1);
+    border: none;
+    cursor: pointer;
+}
+
+.regContainer button:hover {
+    background-color: #45a049;
 }
