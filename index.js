@@ -75,20 +75,21 @@ vaccineTracker.post('/parent_registration', async (req, res) => {
 
         //posting the details into mongo DB
         const createdUser = await Parent_details.create(registrationdata);
-        return res.status(201).json(createdUser);
+       // return res.status(201).json(createdUser);
+       res.render("login-parent");
     };
 
-    try {
-        res.status(201).send('Parent registered successfully');
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
-    }
+    // try {
+    //     res.status(201).send('Parent registered successfully');
+    // } catch (err) {
+    //     console.error(err);
+    //     res.status(500).send('Internal Server Error');
+   // }
 });
 
 
 //login for parent
-vaccineTracker.post('/parentLogin', async (req, res) => {
+vaccineTracker.post('/parentLoginHome', async (req, res) => {
     try {
         console.log("username:" + req.body.userName);
         const userCheck = await Parent_details.find({ username: req.body.userName });
