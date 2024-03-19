@@ -2,12 +2,67 @@
     <%- include('layouts/nav'); -%>
 
         <div class="itemsContainer">
+            <div class="userRegDetails">
+                <p>FullName: <%= registrationDetails.firstName %> <%= registrationDetails.lastName %></P>
+                <p>Email: <%= registrationDetails.email %></p>
+                <p>Address: <%= registrationDetails.address %></p>
+                <p>Mobile Number: <%= registrationDetails.mobileNumber %></p>
+                <p>Gender: <%= registrationDetails.sex %></p>
+            </div>
+                <!-- Add other details as needed -->
+            </div>
 
             <div>
                 <h2 style="text-align: center;"><label>vaccination details for Your child</label></h4>
             </div>
-            <p> Add vaccination details for Your children</p>
+            <button type="button" onclick="addAnotherChild()">Add Another Child</button>
 
+            <p> Add vaccination details for Your children</p>
+            <form action="/add_child_vaccination" method="post" id="childVaccinationForm">
+
+                <div class="child-details">
+                    <div class="form-element">
+                        <label for="childFirstName">Child's First Name:</label>
+                        <input type="text" class="childFirstName" name="childFirstName" required>
+                    </div>
+
+                    <div class="form-element">
+                        <label for="childLastName">Child's Last Name:</label>
+                        <input type="text" class="childLastName" name="childLastName" required>
+                    </div>
+
+
+                    <div class="form-element">
+                        <label for="dob">Date of Birth:</label>
+                        <input type="date" class="dob" name="dateOfBirth" required>
+                        <p id="ageDisplay"></p>
+
+                    </div>
+
+                    <div class="form-element">
+                        <label for="birthplace">Birthplace:</label>
+                        <input type="text" class="birthplace" name="birthplace" required>
+                    </div>
+                    
+                    <br>
+                    
+
+                    <div class="form-element">
+                        <label for="sex">Sex:</label>
+                        <select class="sex" name="sex" required>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    
+
+                    
+
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+
+            <script src="/public/js/add_child_vaccination.js"></script>
 
         </div>
         <%- include('layouts/footer') -%>

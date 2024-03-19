@@ -22,7 +22,7 @@ mongoose.connect('mongodb://localhost:27017/ChildvaccineTracker', {
 
 
 
-//Rwgistration Details
+//Registration Details for parents
 
 // Setup Database Model // Define Parent Schema
 const parentSchema = new mongoose.Schema({
@@ -75,8 +75,8 @@ vaccineTracker.post('/parent_registration', async (req, res) => {
 
         //posting the details into mongo DB
         const createdUser = await Parent_details.create(registrationdata);
-       // return res.status(201).json(createdUser);
-       res.render("login-parent");
+      
+        res.render("login-parent");
     };
 
     // try {
@@ -91,25 +91,109 @@ vaccineTracker.post('/parent_registration', async (req, res) => {
 //login for parent
 vaccineTracker.post('/parentLoginHome', async (req, res) => {
     try {
-        console.log("username:" + req.body.userName);
-        const userCheck = await Parent_details.find({ username: req.body.userName });
-        console.log("username userCheck:" + userCheck);
-        if (userCheck.length === 0) {
+        const userCheck = await Parent_details.findOne({ username: req.body.userName });
+        
+        if (!userCheck) {
             return res.status(401).send('Invalid User name!');
         }
-        console.log("ispasswordmatch password:" + req.body.password + "userCheck[0].password:" + userCheck[0].password);
-        const ispasswordmatch = await bcrypt.compare(req.body.password, userCheck[0].password);
-        console.log("ispasswordmatch:" + ispasswordmatch)
+
+        const ispasswordmatch = await bcrypt.compare(req.body.password, userCheck.password);
+       
         if (ispasswordmatch) {
-            res.render("parentLoginHome");
+            const registrationDetails = {
+                firstName: userCheck.firstName,
+                lastName: userCheck.lastName,
+                address: userCheck.address,
+                mobileNumber: userCheck.mobileNumber,
+                sex: userCheck.sex,
+                email: userCheck.email,
+                username: userCheck.username
+            };
+            // Set registrationDetails in session
+           
+            
+            // Render the parentLoginHome view with registrationDetails
+            res.render("parentLoginHome", { registrationDetails: registrationDetails });
         } else {
-            req.send("wrong password");
+            res.send("Wrong password");
         }
     }
     catch {
         res.send("Invalid Credentials");
     }
 });
+
+
+//adding child details
+
+// Setup Database Model // Define child Schema
+const childSchema = new mongoose.Schema({
+    firstName: String,
+    lastName: String,
+    dateOfBirth: Date,
+    sex: String,
+    birthplace: String,
+    parent: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'parentsdetails'
+            }
+});
+
+
+// Create child Model
+const child_details = mongoose.model('childrendetails', childSchema);
+
+// Routes
+// Parent Registration
+vaccineTracker.post('/add_child_vaccination', async (req, res) => {
+
+     //getting details from the form
+    const childRegistrationData = {
+        firstName : req.body.childFirstName,
+        lastName  : req.body.childLastName,
+        dateOfBirth: req.body.dateOfBirth,
+        sex : req.body.sex,
+        birthplace : req.body.birthplace,
+        parent: req.body.parentId 
+    }
+
+    //checking for duplicate values
+    const existingUser = await child_details.findOne({
+        firstName: childRegistrationData.firstName,
+        lastName: childRegistrationData.lastName
+    });
+    console.log("existingUserLastname : " + existingUser + "   existingUserfirstname :" +childRegistrationData.firstName );
+
+
+    if (existingUser) {
+        return res.status(409).send("Child's details already exist, please try with different details.");
+    } else {
+        //posting the details into mongo DB
+        const createdUser = await child_details.create(childRegistrationData);
+
+        
+        res.render('parentLoginHome');
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //Setup Admin Database Model
 const Admin = mongoose.model('Admin', {
@@ -121,6 +205,7 @@ const Admin = mongoose.model('Admin', {
 // Create Object Destructuring For Express Validator
 const { check, validationResult } = require('express-validator');
 const { stringify } = require('querystring');
+const { log } = require('console');
 
 // Express Body-Parser
 vaccineTracker.use(express.urlencoded({ extended: true }));
@@ -174,13 +259,13 @@ vaccineTracker.post('/', [
 
 // All  Page
 vaccineTracker.get('/parentLoginHome', (req, res) => {
-    // If Session Exists, Then Access All  Page
-    if (req.session.userLoggedIn) {
-        res.render('login-parent',);
-    }
-    else {
-        // Otherwise Redirect User To Login Page
-        res.redirect('/login-parent',);
+    // Check for session and registrationDetails existence
+    if (req.session && req.session.registrationDetails) {
+        const registrationDetails = req.session.registrationDetails; // Retrieve from session
+        res.render('parentLoginHome', { registrationDetails }); // Pass to template
+    } else {
+        // Handle case where session or data is missing (e.g., redirect to login)
+        res.redirect('/login-parent');
     }
 });
 
@@ -241,5 +326,5 @@ vaccineTracker.post('/login-parent', [
 
 
 // Execute Website Using Port Number for Localhost
-vaccineTracker.listen(8082);
-console.log('Website Executed Sucessfully....Open Using http://localhost:8082/');
+vaccineTracker.listen(8084);
+console.log('Website Executed Sucessfully....Open Using http://localhost:8084/');

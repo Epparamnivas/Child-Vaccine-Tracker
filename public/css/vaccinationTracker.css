@@ -362,3 +362,14 @@ footer {
 .regContainer button:hover {
     background-color: #45a049;
 }
+
+
+
+#childVaccinationForm, .userRegDetails{
+    color: #000000;
+}
+
+.child-details{
+    display: flex;
+
+}
