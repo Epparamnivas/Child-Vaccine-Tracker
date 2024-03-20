@@ -1,6 +1,5 @@
 // Function to add another child input field dynamically
 function addAnotherChild() {
-    console.log("another child function called");
     const childDetailsDiv = document.createElement('div');
     childDetailsDiv.classList.add('child-details');
     childDetailsDiv.innerHTML = `
