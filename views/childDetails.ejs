@@ -1,0 +1,65 @@
+<%- include('layouts/header'); -%>
+    <%- include('layouts/nav'); -%>
+
+        <form action="/add_child_vaccination" method="post" id="childVaccinationForm">
+
+            <div class="child-details">
+                <div class="form-element">
+                    <label for="childFirstName"> Child's First Name: </label>
+                    <input type="text" class="childFirstName" id="childFirstName" name="childFirstName" required />
+                </div>
+
+                <div class="form-element">
+                    <label for="childLastName"> Child's Last Name: </label>
+                    <input type="text" class="childLastName" id="childLastName" name="childLastName" required>
+                </div>
+
+
+                <div class="form-element">
+                    <label for="dob">Date of Birth:</label>
+                    <input type="date" class="dob" id="childDob" name="dateOfBirth" required>
+                    <p id="ageDisplay"></p>
+
+                </div>
+
+                <div class="form-element">
+                    <label for="birthplace">Birthplace:</label>
+                    <input type="text" class="birthplace" id="childBirthPlace" name="birthplace" required>
+                </div>
+
+                <br>
+
+
+                <div class="form-element">
+                    <label for="sex">Sex:</label>
+                    <select class="sex" id="childGender" name="sex" required>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit">Submit</button>
+
+            <br><br>
+
+            <div>
+                <h2 style="text-align: center;"><label>vaccination details for Your child</label></h4>
+            </div>
+            <div class="itemsContainer">
+                <div class="childRegDetails">
+                    <p>FullName: <%= childRegistrationData.firstName %>
+                            <%= childRegistrationData.lastName %>
+                    </p>
+                    <p>Date of Birth: <%= childRegistrationData.dateOfBirth %>
+                    </p>
+                    <p>Birth Place: <%= childRegistrationData.birthplace %>
+                    </p>
+                    <p>Gender: <%= childRegistrationData.sex %>
+                    </p>
+                </div>
+
+            </div>
+        </form>
+
+        <%- include('layouts/footer') -%>
