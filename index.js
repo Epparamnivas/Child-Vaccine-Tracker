@@ -176,7 +176,7 @@ vaccineTracker.post('/add_child_vaccination', async (req, res) => {
         //posting the details into mongo DB
         const createdUser = await child_details.create(childRegistrationData);
 
-        res.render('childDetails', { childRegistrationData: childRegistrationData });
+        res.render('childDetails', { childRegistrationData });
     }
 });
 
@@ -255,7 +255,14 @@ vaccineTracker.get('/parentLoginHome', (req, res) => {
 });
 
 vaccineTracker.get('/childDetails', (req, res) => {
-        res.render('childDetails'); // Pass to template
+    if (req.session && req.session.childRegistrationData) {
+        const childRegistrationData = req.session.childRegistrationData; // Retrieve from session
+        res.render('childDetails', { childRegistrationData: childRegistrationData }); // Pass to template
+
+    } else {
+        // Handle case where session or data is missing (e.g., redirect to login)
+        res.redirect('/addChildDetails');
+    }
 });
 
 
@@ -276,6 +283,10 @@ vaccineTracker.get('/login-adult', (req, res) => {
 });
 vaccineTracker.get('/login-admin', (req, res) => {
     res.render('login-admin');
+});
+
+vaccineTracker.get('/addChildDetails', (req, res) => {
+    res.render('addChildDetails');
 });
 
 
