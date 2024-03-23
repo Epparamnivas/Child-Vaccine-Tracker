@@ -270,7 +270,7 @@ vaccineTracker.get('/childDetails', (req, res) => {
 vaccineTracker.get('/logout', (req, res) => {
     req.session.username = '';
     req.session.userLoggedIn = false;
-    res.render('login', { error: "Logout Successfully! " });
+    res.render('login-parent', { error: "Logout Successfully! " });
 });
 
 
