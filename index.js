@@ -14,10 +14,10 @@ vaccineTracker.use(express.urlencoded({ extended: true }))
 
 // Setup Database Connection
 const mongoose = require('mongoose');
-const { MongoClient, Double } = require('mongodb');
-mongoose.connect('mongodb://localhost:27017/ChildvaccineTracker', {
-    UseNewUrlParser: true,
-    UseUnifiedTopology: true
+
+mongoose.connect("mongodb+srv://vaccineTracker:Vaccinetracker%40123@child-vaccination-track.oiqbkgy.mongodb.net/childvaccinetracker", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 });
 
 
@@ -142,7 +142,7 @@ vaccineTracker.post('/parentLoginHome', async (req, res) => {
     catch {
         res.send("Invalid Credentials");
     }
-    
+
 });
 
 
