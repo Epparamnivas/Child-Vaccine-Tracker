@@ -60,7 +60,7 @@ const parentSchema = new mongoose.Schema({
     address: String,
     Spouse_mobileNumber: String,
     Spouse_Relation: String,
-    email: String,
+    Spouse_email: String,
     username: String,
     password: String
 });
@@ -125,16 +125,8 @@ vaccineTracker.post('/parent_registration', async (req, res, next) => {
 
         //posting the details into mongo DB
         const createdUser = await Parent_details.create(registrationdata);
-        
 
-        //generating JWT and sending it to the client side
-        const token = jwt.sign(
-            { parentID: parentID },
-            process.env.JWT_SECRET || 'defaultSecret', // Use process.env.JWT_SECRET or a default value
-            { expiresIn: '3h' }
-        );
-
-        res.status(201).json({ message: "Parent Registered Successfully", token: token });
+        res.status(201).json({ message: "Parent Registered Successfully" });
 
         // Redirect or render appropriate view after registration
         res.render("login-parent");
@@ -161,6 +153,11 @@ vaccineTracker.post('/parentLoginHome', async (req, res) => {
                 mobileNumber: userCheck.mobileNumber,
                 sex: userCheck.sex,
                 email: userCheck.email,
+                Spouse_firstName: userCheck.Spouse_firstName,
+                Spouse_lastName: userCheck.Spouse_lastName,
+                Spouse_mobileNumber: userCheck.Spouse_mobileNumber,
+                Spouse_Relation: userCheck.Spouse_Relation,
+                Spouse_email: userCheck.Spouse_email,
                 username: userCheck.username,
                 _id: userCheck._id
             };

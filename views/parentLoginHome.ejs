@@ -2,7 +2,6 @@
     <%- include('layouts/nav2'); -%>
 
         <div class="itemsContainer-parent">
-            <div class="loginimg"> <img src="/images/Profile.jpg" width="50" height="50"/></div>
             <div class="RegDetails-parent">                
                 <p>FullName: <b><%= registrationDetails.firstName %> <%= registrationDetails.lastName %></b></p>
                 
@@ -13,6 +12,20 @@
                 <p>Mobile Number:<b><%= registrationDetails.mobileNumber %></b></p>
                 
                 <p>Gender:<b><%= registrationDetails.sex %></b></p>
+                
+            </div>
+            <div class="loginimg"> <img src="/images/Profile.jpg" width="50" height="50"/></div>
+            
+            <div class="RegDetails-parent">                
+                <p>Spouse FullName: <b><%= registrationDetails.Spouse_firstName %> <%= registrationDetails.Spouse_lastName %></b></p>
+                
+                <p>Spouse Email: <b> <%= registrationDetails.Spouse_email %></b></p>
+                
+                <p>Spouse Address: <b><%= registrationDetails.address %></b></p>
+                
+                <p>Spouse Mobile Number:<b><%= registrationDetails.Spouse_mobileNumber %></b></p>
+                
+                <p>Spouse Gender:<b><%= registrationDetails.Spouse_Relation %></b></p>
                 
             </div>
             <!--Add other details as needed -->

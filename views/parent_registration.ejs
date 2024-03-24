@@ -6,8 +6,8 @@
         <div class="regContainer">
             <form action="/parent_registration" method="post">
                 <div>
-                    <h2>Parent Registration</h2>
-
+                    <h2 style="text-decoration: underline;">Parent Registration</h2>
+                    <h2>Host Parent Details :</h2>
 
                     <div id="column-row-container">
                         <label for="firstName">First Name:</label>
@@ -42,6 +42,34 @@
 
                         <label for="password">Password:</label>
                         <input type="password" id="password" name="password" required><br>
+                    </div>
+                    <br><br>
+
+                    <!--spousal----------------------------------------------------details-->
+                    <h2>Spouse Parent Details :</h2>
+                    <div id="column-row-container">
+                        <label for="Spouse_firstName">Spouse First Name:</label>
+                        <input type="text" id="Spouse_firstName" name="Spouse_firstName" required>
+
+                        <label for="Spouse_lastName">Spouse Last Name:</label>
+                        <input type="text" id="Spouse_lastName" name="Spouse_lastName" required><br>
+                    </div>
+
+                    <div id="column-row-container">
+
+                        <label for="Spouse_mobileNumber">Mobile Number:</label>
+                        <input type="text" id="Spouse_mobileNumber" name="Spouse_mobileNumber" required><br>
+                    </div>
+
+                    <div id="column-row-container">
+                        <label for="Spouse_Relation">spouse Relation:</label>
+                        <select id="Spouse_Relation" name="Spouse_Relation" required>
+                            <option value="Husband">Husband</option>
+                            <option value="WIfe">Wife</option>
+                        </select>
+
+                        <label for="Spouse_email">Email:</label>
+                        <input type="text" id="Spouse_email" name="Spouse_email" required><br>
                     </div>
 
                     <button type="submit">Register</button>
