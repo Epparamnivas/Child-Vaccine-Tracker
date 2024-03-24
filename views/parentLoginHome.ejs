@@ -1,31 +1,29 @@
 <%- include('layouts/header'); -%>
     <%- include('layouts/nav2'); -%>
 
-        <div class="itemsContainer">
-            <div class="userRegDetails">
-                <div class="loginimg">
-                    <img src="/images/Profile.jpg" width="100" height="100"/>
-                </div>
-                <p>FullName: <%= registrationDetails.firstName %>
-                        <%= registrationDetails.lastName %>
-                </p>
-                <p>Email: <%= registrationDetails.email %>
-                </p>
-                <p>Address: <%= registrationDetails.address %>
-                </p>
-                <p>Mobile Number: <%= registrationDetails.mobileNumber %>
-                </p>
-                <p>Gender: <%= registrationDetails.sex %>
-                </p>
+        <div class="itemsContainer-parent">
+            <div class="loginimg"> <img src="/images/Profile.jpg" width="50" height="50"/></div>
+            <div class="RegDetails-parent">                
+                <p>FullName: <b><%= registrationDetails.firstName %> <%= registrationDetails.lastName %></b></p>
+                
+                <p>Email: <b> <%= registrationDetails.email %></b></p>
+                
+                <p>Address: <b><%= registrationDetails.address %></b></p>
+                
+                <p>Mobile Number:<b><%= registrationDetails.mobileNumber %></b></p>
+                
+                <p>Gender:<b><%= registrationDetails.sex %></b></p>
+                
             </div>
             <!--Add other details as needed -->
         </div>
 
-        <a href="childDetails"> Add vaccination details for Your children</a>
+       
 
         <br><br>
         
-
+        <a href="childDetails"> Add vaccination details for Your children</a>
+        <br><br>
         <script src="/public/js/add_child_vaccination.js"></script>
 
         <%- include('layouts/footer') -%>

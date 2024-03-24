@@ -369,11 +369,39 @@ footer {
 
 
 
-#childVaccinationForm, .userRegDetails{
+#childVaccinationForm{
     color: #000000;
 }
 
 .child-details{
     display: flex;
+}
 
+/*--------------------------------------Parent Home page----------------------------------*/
+
+.itemsContainer-parent {
+    margin: 10px auto 120px auto;
+    border: 2px solid #558B2F;
+    border-radius: 15px;
+    width: 75%;  
+    padding-top: 10px;
+    padding-right: 40px;
+    padding-left: 40px;
+    padding-bottom: 30px;
+    height: 200px;
+    background-color: antiquewhite; 
+    display: inline-flex;
+    justify-content: space-around;
+}
+
+.itemsContainer-parent p{
+    color: #030000;
+    text-align: justify;
+}
+
+.itemsContainer-parent h2{
+    color:#558B2F;
+    text-align: justify;
+    text-decoration:underline;
+    font-style: italic;
 }
