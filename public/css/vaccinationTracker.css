@@ -378,7 +378,9 @@ footer {
 }
 
 /*--------------------------------------Parent Home page----------------------------------*/
-
+.parentHomeLogin{
+    color: #000000;
+}
 .itemsContainer-parent {
     border: 2px solid #558B2F;
     border-radius: 15px;
@@ -389,6 +391,7 @@ footer {
     background-color: antiquewhite; 
     display: inline-flex;
     justify-content: space-around; 
+    color: #000000;
 }
 
 .itemsContainer-parent p{
@@ -401,4 +404,55 @@ footer {
     text-align: justify;
     text-decoration:underline;
     font-style: italic;
+}
+
+.itemsContainer-child {
+    border: 2px solid #558B2F;
+    border-radius: 15px;
+    width: 75%;  
+    padding-right: 40px;
+    padding-left: 40px;
+    height: auto;
+    background-color: antiquewhite; 
+    display: inline-flex;
+}
+
+.itemsContainer-child p{
+    color: #030000;
+    text-align: justify;
+}
+
+.itemsContainer-child h2{
+    color:#558B2F;
+    text-align: justify;
+    text-decoration:underline;
+}
+.itemsContainer-child ul{
+   list-style-type: none;
+}
+
+.modification-Options{
+    display: inline-flex;
+}
+
+
+/*--------------------------------------Addvaccination----------------------------------*/
+.itemsContainer-addvaccination{
+    color: #000000;
+}
+
+
+.addvaccinationDetails{
+   
+    align-items: center;
+    justify-content: space-around;
+    border: 2px solid #558B2F;
+    border-radius: 15px;
+    width: 78%;  
+    padding: 25px;
+    height: auto;
+    background-color: antiquewhite; 
+    display: inline-flex;
+    justify-content: space-around; 
+    color: #000000;
 }

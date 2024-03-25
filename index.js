@@ -169,7 +169,10 @@ vaccineTracker.post('/parentLoginHome', async (req, res) => {
             req.session.parentID = parentID;
             console.log("Session after setting parentID:", req.session)
 
-            res.render('parentLoginHome', { registrationDetails: registrationDetails });
+            // Fetch children details based on parent ID
+            const children = await child_details.find({ parent_Id: userCheck._id });
+
+            res.render('parentLoginHome', { registrationDetails: registrationDetails, children: children });
 
         } else {
             res.send("Wrong password");
@@ -232,13 +235,17 @@ const Admin = mongoose.model('Admin', {
 });
 
 
-//////////////////////////////////////////////////////// Root Page Get Method (First time page load)/////////////////////////////////////
+//////////////////////////////////////////////////////// Rendering to load pages/////////////////////////////////////
+//Root Page Get Method (First time page load)
 vaccineTracker.get('/', function (req, res) {
     res.render('Home');
 });
 
 vaccineTracker.get('/vaccinationDetails', function (req, res) {
     res.render('vaccinationDetails',);
+});
+vaccineTracker.get('/addVaccinationDetails', function (req, res) {
+    res.render('addVaccinationDetails',);
 });
 
 vaccineTracker.get('/aboutUs', function (req, res) {
@@ -266,7 +273,7 @@ vaccineTracker.post('/', [
 
 
 
-//////////////////////////////////////////////////////// All  Page//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////// Route Handler//////////////////////////////////////////////////////
 
 vaccineTracker.get('/parentLoginHome', (req, res) => {
     // Check for session and registrationDetails existence
@@ -279,6 +286,46 @@ vaccineTracker.get('/parentLoginHome', (req, res) => {
         res.redirect('/login-parent');
     }
 });
+vaccineTracker.get('/parentLoginHome', async (req, res) => {
+    try {
+        const parentID = req.session.parentID;
+        if (!parentID) {
+            return res.status(400).send("Parent ID not found in session");
+        }
+
+        // Fetch children details for the current parent from the database
+        const children = await child_details.find({ parent_Id: parentID });
+
+        // Render the parentLoginHome template with children details
+        res.render('parentLoginHome', { children: children });
+    } catch (error) {
+        console.error("Error fetching children:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+vaccineTracker.get('/addVaccinationDetails', async (req, res) => {
+    try {
+        console.error(" child id for the session :  " + childId);
+        const childId = req.query.childId; // Retrieve child ID from query string
+        console.error(" child id for the session :  " + childId);
+
+        // Find the child by ID
+        const child = await child_details.findById(childId);
+
+        if (!child) {
+            return res.status(404).send('Child not found');
+        }
+
+        // Render the addVaccinationDetails.ejs template and pass the child object
+        res.render('addVaccinationDetails', { child: child });
+    } catch (error) {
+        console.error('Error rendering addVaccinationDetails:', error);
+        res.status(500).send('Internal server error');
+    }
+});
+
+
 
 vaccineTracker.get('/addChildDetails', (req, res) => {
     const registrationDetails = req.session.registrationDetails;
@@ -322,6 +369,41 @@ vaccineTracker.get('/login-adult', (req, res) => {
 vaccineTracker.get('/login-admin', (req, res) => {
     res.render('login-admin');
 });
+////////////////////////////////////////////////////// Delete Child Route////////////////////////////////////////////////
+vaccineTracker.post('/deleteChild',async (req, res) => {
+    try {
+        const childId = req.body.childId;
+
+        // Check if the childId is provided
+        if (!childId) {
+            return res.status(400).send('Child ID is required');
+        }
+
+        // Find the child document in the database
+        const child = await child_details.findById(childId);
+
+        // If the child document does not exist, return an error
+        if (!child) {
+            return res.status(404).send('Child not found');
+        }
+
+        // Delete the child document from the database
+        await child_details.findByIdAndDelete(childId);
+
+        // Redirect back to the parentLoginHome page
+        res.redirect('/parentLoginHome');
+    } catch (error) {
+        console.error('Error deleting child:', error);
+        res.status(500).send('Error deleting child');
+    }
+});
+
+////////////////////////////////////////////////// Add Child Vaccination Route///////////////////////////////////////////
+vaccineTracker.get('/addChildVaccination', (req, res) => {
+    const childId = req.query.childId;
+    // Render a form to add vaccination details for the child
+});
+
 
 
 

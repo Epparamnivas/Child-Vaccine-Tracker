@@ -1,0 +1,35 @@
+<%- include('layouts/header'); -%>
+    <%- include('layouts/nav2'); -%>
+   <div class="itemsContainer-addvaccination">
+    <h2>Add Vaccination Details</h2>
+    <div class="addvaccinationDetails">
+    <form action="/addChildVaccination" method="post">
+       
+        <div>
+            <label for="vaccinationName">Vaccination Name:</label>
+            <input type="text" id="vaccinationName" name="vaccinationName" required>
+        </div>
+        <div>
+            <label for="vaccinationFor">Vaccination For:</label>
+            <input type="text" id="vaccinationFor" name="vaccinationFor" required>
+        </div>
+        <div>
+            <label for="vaccinationDate">Vaccination Date:</label>
+            <input type="date" id="vaccinationDate" name="vaccinationDate" required>
+        </div>
+        <div>
+            <label for="vaccinationBy">Vaccination By:</label>
+            <input type="text" id="vaccinationBy" name="vaccinationBy" required>
+        </div>
+        <div>
+            <label for="nextVaccinationDate">Next Suggested Vaccination Date:</label>
+            <input type="date" id="nextVaccinationDate" name="nextVaccinationDate" required>
+        </div>
+      
+        <button type="submit">Add Vaccination</button>
+    </form>
+</div>
+</div>
+    <br><br><br>
+
+        <%- include('layouts/footer'); -%>

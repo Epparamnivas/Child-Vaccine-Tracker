@@ -1,42 +1,104 @@
 <%- include('layouts/header'); -%>
     <%- include('layouts/nav2'); -%>
+<div class="parentHomeLogin">
+        <h2>Parent Details</h2>
+        <h3>Welcome <%= registrationDetails.firstName %>
+                <%= registrationDetails.lastName %>
+        </h3>
 
         <div class="itemsContainer-parent">
-            <div class="RegDetails-parent">                
-                <p>FullName: <b><%= registrationDetails.firstName %> <%= registrationDetails.lastName %></b></p>
-                
-                <p>Email: <b> <%= registrationDetails.email %></b></p>
-                
-                <p>Address: <b><%= registrationDetails.address %></b></p>
-                
-                <p>Mobile Number:<b><%= registrationDetails.mobileNumber %></b></p>
-                
-                <p>Gender:<b><%= registrationDetails.sex %></b></p>
-                
+            <div class="RegDetails-parent">
+                <p>FullName: <b>
+                        <%= registrationDetails.firstName %>
+                            <%= registrationDetails.lastName %>
+                    </b></p>
+                <p>Email: <b>
+                        <%= registrationDetails.email %>
+                    </b></p>
+                <p>Address: <b>
+                        <%= registrationDetails.address %>
+                    </b></p>
+                <p>Mobile Number:<b>
+                        <%= registrationDetails.mobileNumber %>
+                    </b></p>
+                <p>Gender:<b>
+                        <%= registrationDetails.sex %>
+                    </b></p>
             </div>
-            <div class="loginimg"> <img src="/images/Profile.jpg" width="50" height="50"/></div>
-            
-            <div class="RegDetails-parent">                
-                <p>Spouse FullName: <b><%= registrationDetails.Spouse_firstName %> <%= registrationDetails.Spouse_lastName %></b></p>
-                
-                <p>Spouse Email: <b> <%= registrationDetails.Spouse_email %></b></p>
-                
-                <p>Spouse Address: <b><%= registrationDetails.address %></b></p>
-                
-                <p>Spouse Mobile Number:<b><%= registrationDetails.Spouse_mobileNumber %></b></p>
-                
-                <p>Spouse Gender:<b><%= registrationDetails.Spouse_Relation %></b></p>
-                
+            <div class="loginimg">
+                <img src="/images/Profile.jpg" width="50" height="50" />
             </div>
-            <!--Add other details as needed -->
+            <div class="RegDetails-parent">
+                <p>Spouse FullName: <b>
+                        <%= registrationDetails.Spouse_firstName %>
+                            <%= registrationDetails.Spouse_lastName %>
+                    </b></p>
+                <p>Spouse Email: <b>
+                        <%= registrationDetails.Spouse_email %>
+                    </b></p>
+                <p>Spouse Address: <b>
+                        <%= registrationDetails.Spouse_address %>
+                    </b></p>
+                <p>Spouse Mobile Number:<b>
+                        <%= registrationDetails.Spouse_mobileNumber %>
+                    </b></p>
+                <p>Spouse Relation:<b>
+                        <%= registrationDetails.Spouse_Relation %>
+                    </b></p>
+            </div>
         </div>
 
-       
+        <br><br><br><br>
+
+        <h2>Children Details</h2>
+
+        <div class="itemsContainer-child">
+            <% if (children && children.length> 0) { %>
+                <ul>
+                    <% function displayChildDetails(child, index) { %>
+                        <h4>Child <%= index + 1 %> Details</h4>
+                        <li>
+                            <p>FullName: <b>
+                                    <%= child.firstName %>
+                                        <%= child.lastName %>
+                                </b></p>
+                            <p>Date of Birth: <b>
+                                    <%= child.dateOfBirth.toLocaleDateString() %>
+                                </b></p>
+                            <p>Birthplace: <b>
+                                    <%= child.birthplace %>
+                                </b></p>
+                            <p>Gender:<b>
+                                    <%= child.sex %>
+                                </b></p>
+                        </li>
+                        <div class = "modification-Options">
+                        <form action="/deleteChild" method="post">
+                            <input type="hidden" name="childId" value="<%= child._id %>">
+                            <button type="submit">Delete Details</button>
+                        </form>
+                        <form action="/addVaccinationDetails" method="get">
+                            <input type="hidden" name="childId" value="<%= child._id %>">
+                            <button type="submit">Add Vaccination</button>
+                        </form>
+                    </div>
+                    <br>
+                        -----------------------------------------------------------
+                        <% } %>
+
+                            <% children.forEach((child, index)=> displayChildDetails(child, index)); %>
+                </ul>
+                <% } else { %>
+                    <p>No children details Added yet.</p>
+                    <% } %>
+        </div>
 
         <br><br>
-        
-        <a href="childDetails"> Add vaccination details for Your children</a>
+
+        <a href="childDetails" style="border: 3px solid crimson; border-radius: 5px; padding: 3px;">Add child</a>
         <br><br>
+
         <script src="/public/js/add_child_vaccination.js"></script>
+    </div>
 
-        <%- include('layouts/footer') -%>
+        <%- include('layouts/footer'); -%>
