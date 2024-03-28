@@ -220,6 +220,7 @@ vaccineTracker.post('/add_child_vaccination', async (req, res) => {
         return res.status(409).send("Child's details already exist, please try with different details.");
     } else {
         //posting the details into mongo DB by Creating the child document in the child collection
+        console.log('Created Child started:'); 
         const createdUser = await child_details.create(childRegistrationData);
         console.log('Created Child:', createdUser.parent_Id); // Log created child document for debugging
         
@@ -275,34 +276,51 @@ vaccineTracker.post('/', [
 
 //////////////////////////////////////////////////////// Route Handler//////////////////////////////////////////////////////
 
-vaccineTracker.get('/parentLoginHome', (req, res) => {
+vaccineTracker.get('/parentLoginHome', async(req, res) => {
+    console.log("get parent session:" + req.session);
+    console.log("get parent reg :" + req.session.registrationDetails);
     // Check for session and registrationDetails existence
     if (req.session && req.session.registrationDetails) {
+        console.log("get parent reg if caluse :" );
         const registrationDetails = req.session.registrationDetails; // Retrieve from session
-        res.render('parentLoginHome', { registrationDetails: registrationDetails }); // Pass to template
+        console.log("get parent reg if caluse :" +registrationDetails);
+        const registrationDetailsStringified = JSON.stringify(registrationDetails);
+        console.log("Stringified registrationDetails:", registrationDetailsStringified);
+
+        const parentID = registrationDetails._id;
+       
+        // Fetch children details based on parent ID
+        const children = await child_details.find({ parent_Id: parentID });
+
+        res.render('parentLoginHome', { registrationDetails: registrationDetails, children: children });
+
+
+      
 
     } else {
+
         // Handle case where session or data is missing (e.g., redirect to login)
         res.redirect('/login-parent');
     }
 });
-vaccineTracker.get('/parentLoginHome', async (req, res) => {
-    try {
-        const parentID = req.session.parentID;
-        if (!parentID) {
-            return res.status(400).send("Parent ID not found in session");
-        }
+// vaccineTracker.get('/parentLoginHome', async (req, res) => {
+//     try {
+//         console.log("get parent 2 :" +JSON.stringify(req));
+//         const parentID = req.session.parentID;
+//         if (!parentID) {
+//             return res.status(400).send("Parent ID not found in session");
+//         }
 
-        // Fetch children details for the current parent from the database
-        const children = await child_details.find({ parent_Id: parentID });
+//         // Fetch children details for the current parent from the database
+//         const children = await child_details.find({ parent_Id: parentID });
 
-        // Render the parentLoginHome template with children details
-        res.render('parentLoginHome', { children: children });
-    } catch (error) {
-        console.error("Error fetching children:", error);
-        res.status(500).send("Internal Server Error");
-    }
-});
+//         // Render the parentLoginHome template with children details
+//         res.render('parentLoginHome', { children: children });
+//     } catch (error) {
+//         console.error("Error fetching children:", error);
+//         res.status(500).send("Internal Server Error");
+//     }
+// });
 
 vaccineTracker.get('/addVaccinationDetails', async (req, res) => {
     try {
@@ -454,5 +472,5 @@ vaccineTracker.use(function(err, req, res, next) {
 
 
 // Execute Website Using Port Number for Localhost
-vaccineTracker.listen(2704);
-console.log('Website Executed Sucessfully....Open Using http://localhost:2704/');
+vaccineTracker.listen(2705);
+console.log('Website Executed Sucessfully....Open Using http://localhost:2705/');
