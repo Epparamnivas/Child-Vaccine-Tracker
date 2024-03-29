@@ -225,6 +225,10 @@ vaccineTracker.post('/add_child_vaccination', async (req, res) => {
         console.log('Created Child started:'); 
         const createdUser = await child_details.create(childRegistrationData);
         console.log('Created Child:', createdUser.parent_Id); // Log created child document for debugging
+
+        // Set child ID in session
+        const childID = createdUser._id;
+        req.session.childID = childID;
         
         // Render the addChildDetails template with parent ID
         res.render('addChildDetails', { registrationDetails: { _id: parentID } });
@@ -247,9 +251,9 @@ vaccineTracker.get('/', function (req, res) {
 vaccineTracker.get('/vaccinationDetails', function (req, res) {
     res.render('vaccinationDetails',);
 });
-vaccineTracker.get('/addVaccinationDetails', function (req, res) {
-    res.render('addVaccinationDetails',);
-});
+// vaccineTracker.get('/addVaccinationDetails', function (req, res) {
+//     res.render('addVaccinationDetails',);
+// });
 
 vaccineTracker.get('/aboutUs', function (req, res) {
     res.render('aboutUs',);
@@ -294,10 +298,7 @@ vaccineTracker.get('/parentLoginHome', async(req, res) => {
         // Fetch children details based on parent ID
         const children = await child_details.find({ parent_Id: parentID });
 
-        res.render('parentLoginHome', { registrationDetails: registrationDetails, children: children });
-
-
-      
+        res.render('parentLoginHome', { registrationDetails: registrationDetails, children: children });      
 
     } else {
 
@@ -306,26 +307,33 @@ vaccineTracker.get('/parentLoginHome', async(req, res) => {
     }
 });
 
+// Route handler to render the addVaccinationDetails view with the child object
 vaccineTracker.get('/addVaccinationDetails', async (req, res) => {
     try {
-        console.error(" child id for the session :  " + childId);
-        const childId = req.query.childId; // Retrieve child ID from query string
-        console.error(" child id for the session :  " + childId);
+       
+        // Retrieve child ID from query parameters
+        const childId = req.query.childId;
+        console.error(" child getting id from the session :  " + childId);
+ // Find the child by ID
+ const child = await child_details.findById(childId);
+console.log("child details"+child);
+        // Check if childId is provided
+        if (child) {
+            console.log("child details id"+childId);
+            // Render the addVaccinationDetails.ejs template and pass the child object
+            res.render('addvaccinationDetails', { child: { _id: childId } });
+        } else {
+            // Handle case where child is not found
+            res.status(404).send('Child not found');
+          }
 
-        // Find the child by ID
-        const child = await child_details.findById(childId);
-
-        if (!child) {
-            return res.status(404).send('Child not found');
-        }
-
-        // Render the addVaccinationDetails.ejs template and pass the child object
-        res.render('addVaccinationDetails', { child: child });
+       
     } catch (error) {
         console.error('Error rendering addVaccinationDetails:', error);
         res.status(500).send('Internal server error');
     }
 });
+
 
 
 
@@ -400,12 +408,64 @@ vaccineTracker.post('/deleteChild',async (req, res) => {
     }
 });
 
-////////////////////////////////////////////////// Add Child Vaccination Route///////////////////////////////////////////
-vaccineTracker.get('/addChildVaccination', (req, res) => {
-    const childId = req.query.childId;
-    // Render a form to add vaccination details for the child
+
+
+//////////////////////////////////////////////////// Setup Database Model // Define Vaccination Schema////////////////////////////////////
+const vaccinationSchema = new mongoose.Schema({
+    vaccinationName: String,
+    vaccinationAgainst: String,
+    vaccinationDate: String,
+    vaccinationBy: String,
+    vaccinationPlace: String,
+    SuggestedNextVaccinationDate: String,
+    child_Id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'childrendetails'
+    }
 });
 
+
+// Create Vaccination Model
+const vaccination_details = mongoose.model('Vacciantiondetails', vaccinationSchema);
+
+
+////////////////////////////////////////////////adding Vaccination details///////////////////////////////////////
+//-------------------------------------------------------------------------------------------------------//
+vaccineTracker.post('/add_Vaccination_Details', async (req, res) => {
+    try {
+       
+        const childId = req.body.childId; // Retrieve child ID from query string
+        console.error(" child id for the session :  " + childId);
+
+        // Check if childId is provided
+        if (!childId) {
+            return res.status(404).send('Child not found');
+        }
+
+        // Extract vaccination details from the request body
+        const vaccinationData = {
+            vaccinationName: req.body.vaccinationName,
+            vaccinationAgainst: req.body.vaccinationAgainst,
+            vaccinationDate: req.body.vaccinationDate,
+            vaccinationBy: req.body.vaccinationBy,
+            vaccinationPlace: req.body.vaccinationPlace,
+            suggestedNextVaccinationDate: req.body.SuggestedNextVaccinationDate,
+            child_Id: childId // Associate vaccination with child using child ID
+        };
+       await vaccination_details.create(vaccinationData);
+        
+        res.render('addVaccinationDetails', { child: { _id: childId } });
+
+        // Create vaccination document in the database
+       // const createdVaccination = await vaccination_details.create(vaccinationData);
+       // res.status(201).json({ message: "Vaccination details added successfully" });
+       
+
+    } catch (error) {
+        console.error('Error adding vaccination details:', error);
+        res.status(500).send('Error adding vaccination details');
+    }
+});
 
 
 
@@ -448,10 +508,10 @@ vaccineTracker.post('/login-parent', [
 // It logs the error stack trace to the console for debugging purposes
 // and sends a response with a 500 status code and a generic message to the user
 
-vaccineTracker.use(function(err, req, res, next) {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
-});
+// vaccineTracker.use(function(err, req, res, next) {
+//     console.error(err.stack);
+//     res.status(500).send('Something broke!');
+// });
 
 
 
