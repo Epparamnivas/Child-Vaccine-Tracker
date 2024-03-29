@@ -187,7 +187,7 @@ footer {
 
 /* Style the dropdown link */
 #login-dropdown a {
-    display: block;
+    display: inline;
     text-decoration: none;
     color: #333;
 }
@@ -215,7 +215,9 @@ footer {
 
 /* Show the dropdown options on hover */
 #login-dropdown:hover ul.dropdown {
-    display:block;
+    display:inline;
+    height: auto;
+    width: auto;
 }
 
 /*--------------------------------------Home page----------------------------------*/
