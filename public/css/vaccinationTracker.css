@@ -187,7 +187,7 @@ footer {
 
 /* Style the dropdown link */
 #login-dropdown a {
-    display: block;
+    display: inline;
     text-decoration: none;
     color: #333;
 }
@@ -215,7 +215,9 @@ footer {
 
 /* Show the dropdown options on hover */
 #login-dropdown:hover ul.dropdown {
-    display:block;
+    display:inline;
+    height: auto;
+    width: auto;
 }
 
 /*--------------------------------------Home page----------------------------------*/
@@ -415,6 +417,7 @@ footer {
     height: auto;
     background-color: antiquewhite; 
     display: inline-flex;
+    text-align: center;
 }
 
 .itemsContainer-child p{
@@ -429,12 +432,34 @@ footer {
 }
 .itemsContainer-child ul{
    list-style-type: none;
+   margin:auto;
 }
 
 .modification-Options{
-    display: inline-flex;
+    display: flex;
+    justify-content: space-between;
 }
 
+.add_child_button h2{
+    margin: 0;
+    text-align: center;
+    margin-left: 45%;
+}
+
+.add_child_button a {
+    margin-right: 200px;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    background-color: burlywood;
+    
+}
+
+.add_child_button{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 /*--------------------------------------Addvaccination----------------------------------*/
 .itemsContainer-addvaccination{
