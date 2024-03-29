@@ -71,15 +71,16 @@ const Parent_details = mongoose.model('parentsdetails', parentSchema);
 
 
 
-// Setup Database Model 
 //////////////////////////////////////////////////////////////// Define child Schema/////////////////////////////////////////////////
+
+// Setup Database Model 
 const childSchema = new mongoose.Schema({
     firstName: String,
     lastName: String,
     dateOfBirth: Date,
     sex: String,
     birthplace: String,
-    parent_Id: { // Corrected field name
+    parent_Id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'parentsdetails'
     }
@@ -88,8 +89,9 @@ const childSchema = new mongoose.Schema({
 // Create child Model
 const child_details = mongoose.model('childrendetails', childSchema);
 
-// Routes
 //////////////////////////////////////// Parent Registration///////////////////////////////////////////////
+
+// Routes
 vaccineTracker.post('/parent_registration', async (req, res, next) => {
     //getting details from the form
     const registrationdata = {
@@ -303,24 +305,6 @@ vaccineTracker.get('/parentLoginHome', async(req, res) => {
         res.redirect('/login-parent');
     }
 });
-// vaccineTracker.get('/parentLoginHome', async (req, res) => {
-//     try {
-//         console.log("get parent 2 :" +JSON.stringify(req));
-//         const parentID = req.session.parentID;
-//         if (!parentID) {
-//             return res.status(400).send("Parent ID not found in session");
-//         }
-
-//         // Fetch children details for the current parent from the database
-//         const children = await child_details.find({ parent_Id: parentID });
-
-//         // Render the parentLoginHome template with children details
-//         res.render('parentLoginHome', { children: children });
-//     } catch (error) {
-//         console.error("Error fetching children:", error);
-//         res.status(500).send("Internal Server Error");
-//     }
-// });
 
 vaccineTracker.get('/addVaccinationDetails', async (req, res) => {
     try {
