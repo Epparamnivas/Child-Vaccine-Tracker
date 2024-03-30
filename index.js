@@ -612,6 +612,7 @@ vaccination_details.find({})
             try {
                 // Find parent details for the current vaccination
                 const parent = await Parent_details.findById(vaccination.parent_Id);
+                const child = await child_details.findById(vaccination.child_Id);
 
                 // Check if parent exists
                 if (!parent) {
@@ -620,15 +621,16 @@ vaccination_details.find({})
                 }
 
                 // Compose email subject with parent's name
-                const subject = `Notification for ${parent.firstName} ${parent.lastName}`;
+                const subject = `Vaccination Notification for ${parent.firstName} ${parent.lastName}`;
 
                 // Compose email body
                 let text = `Dear ${parent.firstName} ${parent.lastName},\n\n`;
-                text += `This is a notification message regarding your child's vaccination:\n\n`;
+                text += `This is a notification message regarding your child ${child.firstName} ${child.lastName} Vaccination:\n\n`;
 
                 // Include vaccination details
                 text += `- Vaccination Name: ${vaccination.vaccinationName}\n`;
                 text += `- Vaccination Date: ${vaccination.vaccinationDate}\n\n`;
+                text += `- Vaccination for: ${vaccination.vaccinationAgainst}\n\n`;
                 text += `- NEXT Vaccination Date: ${vaccination.suggestedNextVaccinationDate}\n\n`;
 
                 text += `Sincerely,\nThe Vaccine Tracker Team`;
