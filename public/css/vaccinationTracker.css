@@ -481,3 +481,13 @@ footer {
     justify-content: space-around; 
     color: #000000;
 }
+
+
+
+/* vaccinationRecords is the parent of addvaccinationDetails */
+.vaccinationRecords{
+    content: "Vaccination Records";
+    font-size: large;
+    font-style: italic;
+    color: #000000;
+}

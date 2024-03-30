@@ -1,7 +1,7 @@
 <%- include('layouts/header'); -%>
     <%- include('layouts/nav2'); -%>
    <div class="itemsContainer-addvaccination">
-    <h2>Add Vaccination Details</h2>
+    <h2>Add Vaccination Details <%= child.firstName %> <%= child.lastName %></h2>
     <div class="addvaccinationDetails">
     <form action="/add_Vaccination_Details" method="post">
 
@@ -11,8 +11,8 @@
             <input type="text" id="vaccinationName" name="vaccinationName" required>
         </div>
         <div>
-            <label for="vaccinationAganist">Vaccination Aganist:</label>
-            <input type="text" id="vaccinationAganist" name="vacc inationAganist" placeholder="Disese name" required>
+            <label for="vaccinationAgainst">Vaccination Aganist:</label>
+            <input type="text" id="vaccinationAgainst" name="vaccinationAgainst" placeholder="Disese name" required>
         </div>
         <div>
             <label for="vaccinationDate">Vaccination Date:</label>

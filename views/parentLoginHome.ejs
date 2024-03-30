@@ -81,14 +81,15 @@
                             </li>
                             </div>
                             <div class="modification-Options">
-                                <form action="/deleteChild" method="post">
+                                <form id="deleteForm<%= index %>" action="/deleteChild" method="post">
                                     <input type="hidden" name="childId" value="<%= child._id %>">
-                                    <button type="submit">Delete Details</button>
+                                    <button type="button" onclick="confirmDelete('<%= index %>')">Delete Details</button>
+
                                 </form>
 
-                                <form action="/" method="post">
+                                <form action="/vaccinationRecord" method="get">
                                     <input type="hidden" name="childId" value="<%= child._id %>">
-                                    <button type="submit">Add Vaccination</button>
+                                    <button type="submit">Vaccination Record</button>
                                 </form>
                                 
                                 <form action="/addVaccinationDetails" method="get">
@@ -116,3 +117,12 @@
         </div>
 
         <%- include('layouts/footer'); -%>
+        
+
+<script>
+    function confirmDelete(index) {
+        if (confirm("Are you sure you want to delete this Child record?")) {
+            document.getElementById('deleteForm' + index).submit();
+        }
+    }
+</script>
