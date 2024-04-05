@@ -491,3 +491,14 @@ footer {
     font-style: italic;
     color: #000000;
 }
+
+.adminLoginHome{
+    border: 3px solid #9a0707;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+    color: black;
+}
+.line {
+    border-bottom: 1px solid #600d0d; /* Add a border line after each row */
+}

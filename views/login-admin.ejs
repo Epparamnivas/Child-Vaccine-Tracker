@@ -1,13 +1,14 @@
 <%- include('layouts/header'); -%>
 
     <%- include('layouts/nav'); -%>
+
     <div class="login-area">
         <div class="image-container">
             <img src="/images/Logo.png" alt="Brand image" />
         </div>
         <div class="login-container">
 
-            <form action="/login" method="post" id="loginForm">
+            <form action="/login-admin" method="post" id="loginForm">
 
                 <h2>Login as Admin</h2>
                 <div class="form-elements">
@@ -39,14 +40,7 @@
 
        
 
-        <p id="errors">
-        <div id="errors">
-            <% if(typeof(errors) !='undefined' ) { for(let error of errors) { %>
-                <p class="errors">
-                    <%= error.msg %>
-                </p>
-                <% } %>
-                    <% } %>
+      
         </div>
         </p>
 

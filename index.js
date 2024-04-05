@@ -1,28 +1,26 @@
 // Import Dependencies
 const express = require('express');
+const app = express();
 const session = require('express-session');
 const path = require('path');
 var vaccineTracker = express();
 var bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
-
-
+const {check, validationResult} = require('express-validator');
 
 // Set up the view engine to use EJS
 vaccineTracker.set('view engine', 'ejs');
 
 //converting data into json format
 vaccineTracker.use(express.json());
-vaccineTracker.use(express.urlencoded({ extended: true }))
-
 
 // Create Object Destructuring For Express Validator
-const { check, validationResult } = require('express-validator');
 const { stringify } = require('querystring');
 const { log } = require('console');
 
 // Express Body-Parser
 vaccineTracker.use(express.urlencoded({ extended: true }));
+
 //session
 vaccineTracker.use(session({
     secret: 'mysecret',
@@ -47,10 +45,12 @@ mongoose.connection.on('error', err => {
     console.error('MongoDB connection error:', err);
 });
 
-////////////////////////////////////////////Registration Details for parents//////////////////////////////////////////
+////////////////////////////////////////////////////////////Database Define Parent Schema////////////////////////////////////////////////////////
 
 // Setup Database Model // Define Parent Schema
-const parentSchema = new mongoose.Schema({
+// Create Parent Model
+
+const Parent_details = mongoose.model('parentsdetails', new mongoose.Schema({
     firstName: String,
     lastName: String,
     address: String,
@@ -65,18 +65,33 @@ const parentSchema = new mongoose.Schema({
     Spouse_email: String,
     username: String,
     password: String
-});
+}));
 
+//////////////////////////////////////////////////////////////// Define Vaccination Schema/////////////////////////////////////////////////
 
-// Create Parent Model
-const Parent_details = mongoose.model('parentsdetails', parentSchema);
+// Setup Database Model 
+// Vaccination
+const vaccination_details = mongoose.model('Vacciantiondetails', new mongoose.Schema({
+    vaccinationName: String,
+   vaccinationAgainst: String,
+   vaccinationDate: String,
+   vaccinationBy: String,
+   vaccinationPlace: String,
+   suggestedNextVaccinationDate: String,
+   child_Id: {
+       type: mongoose.Schema.Types.ObjectId,
+       ref: 'childrendetails'
+   },
+   parent_Id: {
+       type: mongoose.Schema.Types.ObjectId,
+       ref: 'parentsdetails'
+   }
 
+}));
 
 
 //////////////////////////////////////////////////////////////// Define child Schema/////////////////////////////////////////////////
-
-// Setup Database Model 
-const childSchema = new mongoose.Schema({
+const child_details = mongoose.model('childrendetails', new mongoose.Schema({
     firstName: String,
     lastName: String,
     dateOfBirth: Date,
@@ -86,15 +101,23 @@ const childSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'parentsdetails'
     }
-});
 
-// Create child Model
-const child_details = mongoose.model('childrendetails', childSchema);
+}));
+
 
 //////////////////////////////////////// Parent Registration///////////////////////////////////////////////
+// Validation rules for password
+const loginParentValidation = [
+    check('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters long'),
+    check('password').matches(/[a-z]/).withMessage('Password must contain at least one lowercase letter'),
+    check('password').matches(/[A-Z]/).withMessage('Password must contain at least one uppercase letter'),
+    check('password').matches(/[0-9]/).withMessage('Password must contain at least one number'),
+    check('password').matches(/[!@#$%^&*(),.?":{}|<>]/).withMessage('Password must contain at least one symbol'),
+    check('username').isLength({ min: 6 }).withMessage('Username must be at least 6 characters long'),
+];
 
 // Routes
-vaccineTracker.post('/parent_registration', async (req, res, next) => {
+vaccineTracker.post('/parent_registration', loginParentValidation, async (req, res, next) => {
     //getting details from the form
     const registrationdata = {
         firstName: req.body.firstName,
@@ -110,6 +133,12 @@ vaccineTracker.post('/parent_registration', async (req, res, next) => {
         Spouse_email: req.body.Spouse_email,
         username: req.body.username,
         password: req.body.password
+    }
+
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
     }
 
     //checking for duplicate values
@@ -171,7 +200,7 @@ vaccineTracker.post('/parentLoginHome', async (req, res) => {
             const parentID = registrationDetails._id;
             console.log("Session before setting parentID:", req.session);
             req.session.parentID = parentID;
-            console.log("Session after setting parentID:", req.session)
+            console.log("Session .............after setting parentID:", req.session)
 
             // Fetch children details based on parent ID
             const children = await child_details.find({ parent_Id: userCheck._id });
@@ -188,6 +217,45 @@ vaccineTracker.post('/parentLoginHome', async (req, res) => {
 
 });
 
+
+
+
+///////////////////////////////////////////////////////////////////////Post Login-admin Page//////////////////////////////////////////////////////////////////////
+vaccineTracker.post('/login-admin', [
+    check('userName', 'User Name is required!').notEmpty(),
+    check('password', 'Password is required!').notEmpty(),
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.render('login-admin', { errors: errors.array() });
+        }
+
+        const { userName, password } = req.body;
+
+        // Check if admin with provided username exists
+        const admin = await Admin.findOne({ userName: userName });
+        console.log(`Admin result from db: ${admin}`);
+        if (!admin) {
+            return res.render('login-admin', { errors: [{ msg: 'Invalid username or password' }] });
+        }
+
+        // Compare passwords (plain text)
+        if (admin.password !== password) {
+            return res.render('login-admin', { errors: [{ msg: 'Invalid username or password' }] });
+        }
+
+        // Set session variables
+        req.session.username = admin.username;
+        req.session.userLoggedIn = true;
+
+        // Redirect to dashboard or any other desired route
+        res.redirect('/adminLoginHome');
+    } catch (error) {
+        console.error('Error during admin login:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 ////////////////////////////////////////////////adding child details///////////////////////////////////////
 //-------------------------------------------------------------------------------------------------------//
@@ -238,6 +306,158 @@ vaccineTracker.post('/add_child_vaccination', async (req, res) => {
 });
 
 
+////////////////////////////////////////////////adding Vaccination details///////////////////////////////////////
+//-------------------------------------------------------------------------------------------------------//
+vaccineTracker.post('/add_Vaccination_Details', async (req, res) => {
+    try {
+       
+        const childId = req.body.childId; // Retrieve child ID from query string
+        console.error(" child id for the session :  " + childId);
+
+        // Check if childId is provided
+        if (!childId) {
+            return res.status(404).send('Child not found');
+        }
+
+        const parentId = req.session.parentID;
+        console.error(" parentId id for the session :  " + parentId);
+
+        // Check if parentID is available in the session
+        if (!parentId) {
+            return res.status(404).send('Parent ID not found in session');
+        }
+
+        // Extract vaccination details from the request body
+        const vaccinationData = {
+            vaccinationName: req.body.vaccinationName,
+            vaccinationAgainst: req.body.vaccinationAgainst, // Retrieve vaccinationAgainst from the request body
+            vaccinationDate: req.body.vaccinationDate,
+            vaccinationBy: req.body.vaccinationBy,
+            vaccinationPlace: req.body.vaccinationPlace,
+            suggestedNextVaccinationDate: req.body.suggestedNextVaccinationDate, // Retrieve suggestedNextVaccinationDate from the request body
+            child_Id: childId, // Associate vaccination with child using child ID
+            parent_Id: parentId // Associate vaccination with parent using parent ID
+        };
+        console.log("vaccination details : "+JSON.stringify(vaccinationData));
+       await vaccination_details.create(vaccinationData);
+        
+        res.render('addVaccinationDetails', { child: { _id: childId } });
+
+        // Create vaccination document in the database
+       // const createdVaccination = await vaccination_details.create(vaccinationData);
+       // res.status(201).json({ message: "Vaccination details added successfully" });
+       
+
+    } catch (error) {
+        console.error('Error adding vaccination details:', error);
+        res.status(500).send('Error adding vaccination details');
+    }
+});
+
+////////////////////////////////////////////////////// Delete Child Route////////////////////////////////////////////////
+vaccineTracker.post('/deleteChild',async (req, res) => {
+    try {
+        const childId = req.body.childId;
+
+        // Check if the childId is provided
+        if (!childId) {
+            return res.status(400).send('Child ID is required');
+        }
+
+        // Find the child document in the database
+        const child = await child_details.findById(childId);
+
+        // If the child document does not exist, return an error
+        if (!child) {
+            return res.status(404).send('Child not found');
+        }
+
+        // Delete the child document from the database
+        await child_details.findByIdAndDelete(childId);
+
+        // Redirect back to the parentLoginHome page
+        res.redirect('/parentLoginHome');
+    } catch (error) {
+        console.error('Error deleting child:', error);
+        res.status(500).send('Error deleting child');
+    }
+});
+
+/////////////////////////////////////deleting the vaccination record /////////////////////////////////////////////////
+//-----------------------------------------------------------------------------------------------//
+vaccineTracker.post('/deleteVaccination', async (req, res) => {
+    try {
+        const vaccinationId = req.body.vaccinationId;
+
+        // Check if the vaccinationId is provided
+        if (!vaccinationId) {
+            return res.status(400).send('Vaccination ID is required');
+        }
+
+        // Find the vaccination document in the database
+        const vaccination = await vaccination_details.findById(vaccinationId);
+
+        // If the vaccination document does not exist, return an error
+        if (!vaccination) {
+            return res.status(404).send('Vaccination record not found');
+        }
+
+        // Delete the vaccination document from the database
+        await vaccination_details.findByIdAndDelete(vaccinationId);
+
+        // Redirect back to the vaccination record page
+        res.redirect('/vaccinationRecord?childId=' + vaccination.child_Id);
+    } catch (error) {
+        console.error('Error deleting vaccination record:', error);
+        res.status(500).send('Error deleting vaccination record');
+    }
+});
+
+/////////////////////////////////////deleting the complete record /////////////////////////////////////////////////
+//-----------------------------------------------------------------------------------------------//
+
+vaccineTracker.post('/delete', async (req, res) => {
+    try {
+         // Extract parent ID from the request body
+         const parentId = req.body.parentId;
+         console.log('Parent ID:', parentId);
+
+         // Perform deletion of children and vaccinations associated with the parent
+         await child_details.deleteMany({ parent_Id: parentId });
+         await vaccination_details.deleteMany({ parent_Id: parentId });
+         await Parent_details.findByIdAndDelete(parentId);
+
+         // Send a success response
+         console.log('Children and vaccinations deleted successfully.');
+         res.redirect('/adminLoginHome');
+     } catch (error) {
+         console.error('Error deleting children and vaccinations:', error);
+         res.status(500).send('Error deleting children and vaccinations.');
+     }
+});
+
+
+
+/////////////////////////////////////////////////////////////////////////////// Root Page Post Method (Server Response)/////////////////////////////////////////////////////
+vaccineTracker.post('/', [
+], function (req, res) {
+    const errors = validationResult(req);
+    console.log(errors);
+    if (!errors.isEmpty()) {
+        res.render('Home', { errors: errors.array() });
+
+    } else {
+        res.render('userConfirm', orderDB);
+    }
+});
+
+/////////////////////////////////////////////////////////Setup Admin Database Model//////////////////////////////////////////////////////
+const Admin = mongoose.model('admindetails',new mongoose.Schema({
+    userName: String,
+    password: String
+}));
+
+
 ////////////////////////////////////////////////Define route to handle viewing vaccination records/////////////////////////////////////////
 vaccineTracker.get('/vaccinationRecord', async (req, res) => {
     try {
@@ -262,12 +482,6 @@ vaccineTracker.get('/vaccinationRecord', async (req, res) => {
     }
 });
 
-/////////////////////////////////////////////////////////Setup Admin Database Model//////////////////////////////////////////////////////
-const Admin = mongoose.model('Admin', {
-    uName: String,
-    pass: String
-});
-
 
 //////////////////////////////////////////////////////// Rendering to load pages/////////////////////////////////////
 //Root Page Get Method (First time page load)
@@ -290,20 +504,27 @@ vaccineTracker.get('/parent_registration', function (req, res) {
     res.render('parent_registration',);
 });
 
-// Root Page Post Method (Server Response)
-vaccineTracker.post('/', [
-], function (req, res) {
-    const errors = validationResult(req);
-    console.log(errors);
-    if (!errors.isEmpty()) {
-        res.render('Home', { errors: errors.array() });
+// Route handler for adminLoginHome
+vaccineTracker.get('/adminLoginHome', async (req, res) => {
+    try {
+        // Fetch all parents from the database
+        const parents = await Parent_details.find({});
+        
+        // Iterate over each parent and fetch their respective children and vaccination details
+        const parentData = [];
+        for (const parent of parents) {
+            const children = await child_details.find({ parent_Id: parent._id });
+            const vaccinations = await vaccination_details.find({ parent_Id: parent._id });
+            parentData.push({ parent: parent, children: children, vaccinations: vaccinations });
+        }
 
-    } else {
-        res.render('userConfirm', orderDB);
+        // Render the adminLoginHome view with the retrieved parent data
+        res.render('adminLoginHome', { parentData: parentData });
+    } catch (error) {
+        console.error('Error fetching parent and child details:', error);
+        res.status(500).send('Error fetching parent and child details');
     }
 });
-
-
 
 //////////////////////////////////////////////////////// Route Handler//////////////////////////////////////////////////////
 
@@ -312,7 +533,7 @@ vaccineTracker.get('/parentLoginHome', async(req, res) => {
     console.log("get parent reg :" + req.session.registrationDetails);
     // Check for session and registrationDetails existence
     if (req.session && req.session.registrationDetails) {
-        console.log("get parent reg if caluse :" );
+        console.log("get parent reg if caluse :" +req.session.registrationDetails );
         const registrationDetails = req.session.registrationDetails; // Retrieve from session
         console.log("get parent reg if caluse :" +registrationDetails);
         const registrationDetailsStringified = JSON.stringify(registrationDetails);
@@ -361,7 +582,6 @@ console.log("child details"+child);
 
 
 
-
 vaccineTracker.get('/addChildDetails', (req, res) => {
     const registrationDetails = req.session.registrationDetails;
     if (registrationDetails) {
@@ -404,259 +624,94 @@ vaccineTracker.get('/login-adult', (req, res) => {
 vaccineTracker.get('/login-admin', (req, res) => {
     res.render('login-admin');
 });
-////////////////////////////////////////////////////// Delete Child Route////////////////////////////////////////////////
-vaccineTracker.post('/deleteChild',async (req, res) => {
-    try {
-        const childId = req.body.childId;
-
-        // Check if the childId is provided
-        if (!childId) {
-            return res.status(400).send('Child ID is required');
-        }
-
-        // Find the child document in the database
-        const child = await child_details.findById(childId);
-
-        // If the child document does not exist, return an error
-        if (!child) {
-            return res.status(404).send('Child not found');
-        }
-
-        // Delete the child document from the database
-        await child_details.findByIdAndDelete(childId);
-
-        // Redirect back to the parentLoginHome page
-        res.redirect('/parentLoginHome');
-    } catch (error) {
-        console.error('Error deleting child:', error);
-        res.status(500).send('Error deleting child');
-    }
-});
 
 
-
-
-
-//////////////////////////////////////////////////// Setup Database Model // Define Vaccination Schema////////////////////////////////////
-const vaccinationSchema = new mongoose.Schema({
-    vaccinationName: String,
-    vaccinationAgainst: String,
-    vaccinationDate: String,
-    vaccinationBy: String,
-    vaccinationPlace: String,
-    suggestedNextVaccinationDate: String,
-    child_Id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'childrendetails'
-    },
-    parent_Id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'parentsdetails'
-    }
-});
-
-
-// Create Vaccination Model
-const vaccination_details = mongoose.model('Vacciantiondetails', vaccinationSchema);
-
-
-////////////////////////////////////////////////adding Vaccination details///////////////////////////////////////
-//-------------------------------------------------------------------------------------------------------//
-vaccineTracker.post('/add_Vaccination_Details', async (req, res) => {
-    try {
-       
-        const childId = req.body.childId; // Retrieve child ID from query string
-        console.error(" child id for the session :  " + childId);
-
-        // Check if childId is provided
-        if (!childId) {
-            return res.status(404).send('Child not found');
-        }
-
-        const parentId = req.session.parentID;
-        console.error(" parentId id for the session :  " + parentId);
-
-        // Check if parentID is available in the session
-        if (!parentId) {
-            return res.status(404).send('Parent ID not found in session');
-        }
-
-        // Extract vaccination details from the request body
-        const vaccinationData = {
-            vaccinationName: req.body.vaccinationName,
-            vaccinationAgainst: req.body.vaccinationAgainst, // Retrieve vaccinationAgainst from the request body
-            vaccinationDate: req.body.vaccinationDate,
-            vaccinationBy: req.body.vaccinationBy,
-            vaccinationPlace: req.body.vaccinationPlace,
-            suggestedNextVaccinationDate: req.body.suggestedNextVaccinationDate, // Retrieve suggestedNextVaccinationDate from the request body
-            child_Id: childId, // Associate vaccination with child using child ID
-            parent_Id: parentId // Associate vaccination with parent using parent ID
-        };
-        console.log("vaccination details : "+JSON.stringify(vaccinationData));
-       await vaccination_details.create(vaccinationData);
-        
-        res.render('addVaccinationDetails', { child: { _id: childId } });
-
-        // Create vaccination document in the database
-       // const createdVaccination = await vaccination_details.create(vaccinationData);
-       // res.status(201).json({ message: "Vaccination details added successfully" });
-       
-
-    } catch (error) {
-        console.error('Error adding vaccination details:', error);
-        res.status(500).send('Error adding vaccination details');
-    }
-});
-/////////////////////////////////////deleting the vaccination record /////////////////////////////////////////////////
-//-----------------------------------------------------------------------------------------------//
-vaccineTracker.post('/deleteVaccination', async (req, res) => {
-    try {
-        const vaccinationId = req.body.vaccinationId;
-
-        // Check if the vaccinationId is provided
-        if (!vaccinationId) {
-            return res.status(400).send('Vaccination ID is required');
-        }
-
-        // Find the vaccination document in the database
-        const vaccination = await vaccination_details.findById(vaccinationId);
-
-        // If the vaccination document does not exist, return an error
-        if (!vaccination) {
-            return res.status(404).send('Vaccination record not found');
-        }
-
-        // Delete the vaccination document from the database
-        await vaccination_details.findByIdAndDelete(vaccinationId);
-
-        // Redirect back to the vaccination record page
-        res.redirect('/vaccinationRecord?childId=' + vaccination.child_Id);
-    } catch (error) {
-        console.error('Error deleting vaccination record:', error);
-        res.status(500).send('Error deleting vaccination record');
-    }
-});
-
-
-
-
-
-// Post Login-admin Page
-vaccineTracker.post('/login-parent', [
-    check('userName', 'User Name is required!').notEmpty(),
-    check('password', 'Password is required!').notEmpty(),
-], (req, res) => {
-    const errors = validationResult(req);
-    console.log(errors);
-    if (!errors.isEmpty()) {
-        // Display Error Messages
-        res.render('login-admin', { errors: errors.array() });
-    } else {
-        console.log(req.body);
-        var userName = req.body.userName;
-        var password = req.body.password;
-        console.log(`userName=${userName} and password: ${password}`);
-        //Validate against DB
-        Admin.findOne({ aname: userName, pass: password }).then((admin) => {
-            console.log(`Admin result from db: ${admin}`);
-            if (admin) {
-                req.session.username = admin.username;
-                req.session.userLoggedIn = true;
-                res.redirect('/userDetails');
-            } else {
-                res.render('login-admin', { errors: "Sorry Login Failed. Please Try Again!" });
-                console.log(errors);
-            }
-
-        }).catch((err) => {
-            console.log(`Error: ${err}`);
-        })
-    }
-});
-
-// Error handling middleware function
+////////////////////////////////////////////////////////////////////// Error handling middleware function///////////////////////////////////////////////////////
 // This function is called when an error occurs in the application
 // It logs the error stack trace to the console for debugging purposes
 // and sends a response with a 500 status code and a generic message to the user
 
-// vaccineTracker.use(function(err, req, res, next) {
-//     console.error(err.stack);
-//     res.status(500).send('Something broke!');
-// });
+vaccineTracker.use(function(err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
 
 
 /////////////////////////////////////////////////////////mailNotification Configuarations////////////////////////////////////////////
 //=================================================================================================================================//
-const cron = require('node-cron');
-const nodemailer = require('nodemailer');
-// Function to send email notification
-const transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-        user: 'childvaccinationtracker@gmail.com',
-        pass: 'rslo mbjo drza bkmw'
-    }
-});
+// const cron = require('node-cron');
+// const nodemailer = require('nodemailer');
+// // Function to send email notification
+// const transporter = nodemailer.createTransport({
+//     service: 'Gmail',
+//     auth: {
+//         user: 'childvaccinationtracker@gmail.com',
+//         pass: 'rslo mbjo drza bkmw'
+//     }
+// });
 
-// Fetch all parent records from the database
-vaccination_details.find({})
-    .then(async vaccinations => {
-        // Check if there are any vaccination records
-        if (vaccinations.length === 0) {
-            console.log('No vaccination records found.');
-            return;
-        }
+// // Fetch all parent records from the database
+// vaccination_details.find({})
+//     .then(async vaccinations => {
+//         // Check if there are any vaccination records
+//         if (vaccinations.length === 0) {
+//             console.log('No vaccination records found.');
+//             return;
+//         }
 
-        // Iterate over each vaccination record
-        for (const vaccination of vaccinations) {
-            try {
-                // Find parent details for the current vaccination
-                const parent = await Parent_details.findById(vaccination.parent_Id);
-                const child = await child_details.findById(vaccination.child_Id);
+//         // Iterate over each vaccination record
+//         for (const vaccination of vaccinations) {
+//             try {
+//                 // Find parent details for the current vaccination
+//                 const parent = await Parent_details.findById(vaccination.parent_Id);
+//                 const child = await child_details.findById(vaccination.child_Id);
 
-                // Check if parent exists
-                if (!parent) {
-                    console.log(`Parent not found for vaccination ID: ${vaccination._id}`);
-                    continue;
-                }
+//                 // Check if parent exists
+//                 if (!parent) {
+//                     console.log(`Parent not found for vaccination ID: ${vaccination._id}`);
+//                     continue;
+//                 }
 
-                // Compose email subject with parent's name
-                const subject = `Vaccination Notification for ${parent.firstName} ${parent.lastName}`;
+//                 // Compose email subject with parent's name
+//                 const subject = `Vaccination Notification for ${parent.firstName} ${parent.lastName}`;
 
-                // Compose email body
-                let text = `Dear ${parent.firstName} ${parent.lastName},\n\n`;
-                text += `This is a notification message regarding your child ${child.firstName} ${child.lastName} Vaccination:\n\n`;
+//                 // Compose email body
+//                 let text = `Dear ${parent.firstName} ${parent.lastName},\n\n`;
+//                 text += `This is a notification message regarding your child ${child.firstName} ${child.lastName} Vaccination:\n\n`;
 
-                // Include vaccination details
-                text += `- Vaccination Name: ${vaccination.vaccinationName}\n`;
-                text += `- Vaccination Date: ${vaccination.vaccinationDate}\n\n`;
-                text += `- Vaccination for: ${vaccination.vaccinationAgainst}\n\n`;
-                text += `- NEXT Vaccination Date: ${vaccination.suggestedNextVaccinationDate}\n\n`;
+//                 // Include vaccination details
+//                 text += `- Vaccination Name: ${vaccination.vaccinationName}\n`;
+//                 text += `- Vaccination Date: ${vaccination.vaccinationDate}\n\n`;
+//                 text += `- Vaccination for: ${vaccination.vaccinationAgainst}\n\n`;
+//                 text += `- NEXT Vaccination Date: ${vaccination.suggestedNextVaccinationDate}\n\n`;
 
-                text += `Sincerely,\nThe Vaccine Tracker Team`;
+//                 text += `Sincerely,\nThe Vaccine Tracker Team`;
 
-                // Configure mail options
-                const mailOptions = {
-                    from: 'childvaccinationtracker@gmail.com',
-                    to: parent.email,
-                    subject: subject,
-                    text: text
-                };
+//                 // Configure mail options
+//                 const mailOptions = {
+//                     from: 'childvaccinationtracker@gmail.com',
+//                     to: parent.email,
+//                     subject: subject,
+//                     text: text
+//                 };
 
-                // Send email
-                const info = await transporter.sendMail(mailOptions);
-                console.log('Email sent:', info.response);
-            } catch (error) {
-                console.error('Error sending email:', error);
-            }
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching vaccination records:', error);
-    });
+//                 // Send email
+//                 const info = await transporter.sendMail(mailOptions);
+//                 console.log('Email sent:', info.response);
+//             } catch (error) {
+//                 console.error('Error sending email:', error);
+//             }
+//         }
+//     })
+//     .catch(error => {
+//         console.error('Error fetching vaccination records:', error);
+//     });
 
 
 
 // Execute Website Using Port Number for Localhost
-vaccineTracker.listen(2705);
-console.log('Website Executed Sucessfully....Open Using http://localhost:2705/');
+// Start Server
+const PORT = process.env.PORT || 2705;
+vaccineTracker.listen(PORT, () => {
+    console.log(`Server is running successfully on port ${PORT}, ....Open Using http://localhost:${PORT}/'`);
+});
