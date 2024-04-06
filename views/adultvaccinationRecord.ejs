@@ -1,0 +1,46 @@
+<%- include('layouts/header'); -%>
+<%- include('layouts/nav2'); -%>
+
+<div class="addultvaccinationRecords">
+    <p>Vaccination Record of : <b><%= childName %></b></p>
+    <p>==================================================</p>
+    <% if (vaccinations && vaccinations.length > 0) { %>
+        <ul>
+            <% vaccinations.forEach((vaccination, index) => { %>
+                <li>
+                    <h3>Vaccination <%= index + 1 %></h3>
+                    <p>Vaccination Name: <b><%= vaccination.vaccinationName %></b></p>
+                    <p>Vaccination Against: <b><%= vaccination.vaccinationAgainst %></b></p> <!-- Display vaccination against -->
+                    <p>Vaccination Date: <b><%= vaccination.vaccinationDate %></b></p>
+                    <p>Vaccination By: <b><%= vaccination.vaccinationBy %></b></p>
+                    <p>Vaccination Place: <b><%= vaccination.vaccinationPlace %></b></p>
+                    <p>Suggested Next Vaccination Date: <b><%= vaccination.suggestedNextVaccinationDate %></b></p>
+
+                     <!-- Form to delete the vaccination record -->
+                     <form id="deleteForm<%= index %>" action="/deleteVaccination" method="post">
+                        <input type="hidden" name="vaccinationId" value="<%= vaccination._id %>">
+                        <button type="button" onclick="confirmDelete('<%= index %>')">Delete</button>
+                    </form>
+
+                    <p>=========================================================================================================</p>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>No vaccination records found for this child.</p>
+    <% } %>
+</div>
+
+<br><br><br>
+
+<%- include('layouts/footer'); -%>
+
+
+
+<script>
+    function confirmDelete(index) {
+        if (confirm("Are you sure you want to delete this vaccination record?")) {
+            document.getElementById('deleteForm' + index).submit();
+        }
+    }
+</script>

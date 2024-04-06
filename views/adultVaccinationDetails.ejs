@@ -1,0 +1,42 @@
+<%- include('layouts/header'); -%>
+    <%- include('layouts/nav2'); -%>
+   <div class="itemsContainer-addvaccination">
+    <h2>Add Vaccination Details <%= registrationDetails.firstName %> <%= registrationDetails.lastName %></h2>
+    <div class="addvaccinationDetails">
+    <form action="/adultVaccinationDetails" method="post">
+
+       
+        <div>
+            <label for="vaccinationName">Vaccination Name:</label>
+            <input type="text" id="vaccinationName" name="vaccinationName" required>
+        </div>
+        <div>
+            <label for="vaccinationAgainst">Vaccination Aganist:</label>
+            <input type="text" id="vaccinationAgainst" name="vaccinationAgainst" placeholder="Disese name" required>
+        </div>
+        <div>
+            <label for="vaccinationDate">Vaccination Date:</label>
+            <input type="date" id="vaccinationDate" name="vaccinationDate" placeholder="Date of vaccination" required>
+        </div>
+        <div>
+            <label for="vaccinationBy">Vaccination By:</label>
+            <input type="text" id="vaccinationBy" name="vaccinationBy" placeholder="Name of organisation/perrson "required>
+        </div>
+        <div>
+            <label for="vaccinationPlace">Vaccination Place:</label>
+            <input type="text" id="vaccinationPlace" name="vaccinationPlace" placeholder="Where did you take it" required>
+        </div>
+        <div>
+            <label for="suggestedNextVaccinationDate">Next Suggested Vaccination Date:</label>
+            <input type="date" id="suggestedNextVaccinationDate" name="suggestedNextVaccinationDate" required>
+        </div>
+        
+        <input type="hidden" id="registrationDetailsId" name="childId" value="<%= registrationDetails._id %>">
+
+        <button type="submit">Add Vaccination</button>
+    </form>
+</div>
+</div>
+    <br><br><br>
+
+        <%- include('layouts/footer'); -%>
