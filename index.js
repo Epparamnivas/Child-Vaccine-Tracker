@@ -413,7 +413,9 @@ vaccineTracker.post('/add_child_vaccination', async (req, res) => {
 
         // Set child ID in session
         const childID = createdUser._id;
+        const childDOB = createdUser.dob;
         req.session.childID = childID;
+        req.session.childDOB = childDOB;
         
         // Render the addChildDetails template with parent ID
         res.render('addChildDetails', { registrationDetails: { _id: parentID } });
@@ -634,18 +636,42 @@ vaccineTracker.get('/vaccinationRecord', async (req, res) => {
         // Fetch child details from the database based on child ID
         const child = await child_details.findById(childId);
         
-        // If child is found, get the child's name
-        const childName = child ? `${child.firstName} ${child.lastName}` : 'Unknown';
-        console.error('vaccination records of :'+childName);
+        // If child is found, get the child's name and date of birth
+        let childName = 'Unknown';
+        let childDOB = 'Unknown';
+        let childage =  'Unknown';
+        if (child) {
+            childName = `${child.firstName} ${child.lastName}`;
+            childDOB = child.dateOfBirth;
 
+            // Calculate age from date of birth
+            childage = getAge(childDOB);
+            console.error('vaccination records of :' + childName + ' Age: ' + childage);
+        } else {
+            console.error('Child not found with ID: ' + childId);
+        }
 
         // Render the vaccination record view with the retrieved records and child's name
-        res.render('vaccinationRecord', { vaccinations: vaccinations, childName: childName });
+        res.render('vaccinationRecord', { vaccinations, childName, childage });
     } catch (error) {
         console.error('Error fetching vaccination records:', error);
         res.status(500).send('Error fetching vaccination records');
     }
 });
+
+// Function to calculate age from date of birth
+function getAge(dateString)  {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var years = today.getFullYear() - birthDate.getFullYear();
+    var months = today.getMonth() - birthDate.getMonth();
+    if (months < 0 || (months === 0 && today.getDate() < birthDate.getDate())) {
+        years--;
+        months += 12;
+    }
+    return { years: years, months: months };
+}
+
 
 
 //////////////////////////////////////////////////////// Rendering to load pages/////////////////////////////////////
@@ -810,73 +836,73 @@ vaccineTracker.use(function(err, req, res, next) {
 
 /////////////////////////////////////////////////////////mailNotification Configuarations////////////////////////////////////////////
 //=================================================================================================================================//
-const cron = require('node-cron');
-const nodemailer = require('nodemailer');
-// Function to send email notification
-const transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-        user: 'childvaccinationtracker1@gmail.com',
-        pass: 'cqwo zfwk utvj qjkj'
-    }
-});
+// const cron = require('node-cron');
+// const nodemailer = require('nodemailer');
+// // Function to send email notification
+// const transporter = nodemailer.createTransport({
+//     service: 'Gmail',
+//     auth: {
+//         user: 'childvaccinationtracker1@gmail.com',
+//         pass: 'cqwo zfwk utvj qjkj'
+//     }
+// });
 
-// Fetch all parent records from the database
-vaccination_details.find({})
-    .then(async vaccinations => {
-        // Check if there are any vaccination records
-        if (vaccinations.length === 0) {
-            console.log('No vaccination records found.');
-            return;
-        }
+// // Fetch all parent records from the database
+// vaccination_details.find({})
+//     .then(async vaccinations => {
+//         // Check if there are any vaccination records
+//         if (vaccinations.length === 0) {
+//             console.log('No vaccination records found.');
+//             return;
+//         }
 
-        // Iterate over each vaccination record
-        for (const vaccination of vaccinations) {
-            try {
-                // Find parent details for the current vaccination
-                const parent = await Parent_details.findById(vaccination.parent_Id);
-                const child = await child_details.findById(vaccination.child_Id);
+//         // Iterate over each vaccination record
+//         for (const vaccination of vaccinations) {
+//             try {
+//                 // Find parent details for the current vaccination
+//                 const parent = await Parent_details.findById(vaccination.parent_Id);
+//                 const child = await child_details.findById(vaccination.child_Id);
 
-                // Check if parent exists
-                if (!parent) {
-                    console.log(`Parent not found for vaccination ID: ${vaccination._id}`);
-                    continue;
-                }
+//                 // Check if parent exists
+//                 if (!parent) {
+//                     console.log(`Parent not found for vaccination ID: ${vaccination._id}`);
+//                     continue;
+//                 }
 
-                // Compose email subject with parent's name
-                const subject = `Vaccination Notification for ${parent.firstName} ${parent.lastName}`;
+//                 // Compose email subject with parent's name
+//                 const subject = `Vaccination Notification for ${parent.firstName} ${parent.lastName}`;
 
-                // Compose email body
-                let text = `Dear ${parent.firstName} ${parent.lastName},\n\n`;
-                text += `This is a notification message regarding your child ${child.firstName} ${child.lastName} Vaccination:\n\n`;
+//                 // Compose email body
+//                 let text = `Dear ${parent.firstName} ${parent.lastName},\n\n`;
+//                 text += `This is a notification message regarding your child ${child.firstName} ${child.lastName} Vaccination:\n\n`;
 
-                // Include vaccination details
-                text += `- Vaccination Name: ${vaccination.vaccinationName}\n`;
-                text += `- Vaccination Date: ${vaccination.vaccinationDate}\n\n`;
-                text += `- Vaccination for: ${vaccination.vaccinationAgainst}\n\n`;
-                text += `- NEXT Vaccination Date: ${vaccination.suggestedNextVaccinationDate}\n\n`;
+//                 // Include vaccination details
+//                 text += `- Vaccination Name: ${vaccination.vaccinationName}\n`;
+//                 text += `- Vaccination Date: ${vaccination.vaccinationDate}\n\n`;
+//                 text += `- Vaccination for: ${vaccination.vaccinationAgainst}\n\n`;
+//                 text += `- NEXT Vaccination Date: ${vaccination.suggestedNextVaccinationDate}\n\n`;
 
-                text += `Sincerely,\nThe Vaccine Tracker Team`;
+//                 text += `Sincerely,\nThe Vaccine Tracker Team`;
 
-                // Configure mail options
-                const mailOptions = {
-                    from: 'childvaccinationtracker1@gmail.com',
-                    to: parent.email,
-                    subject: subject,
-                    text: text
-                };
+//                 // Configure mail options
+//                 const mailOptions = {
+//                     from: 'childvaccinationtracker1@gmail.com',
+//                     to: parent.email,
+//                     subject: subject,
+//                     text: text
+//                 };
 
-                // Send email
-                const info = await transporter.sendMail(mailOptions);
-                console.log('Email sent:', info.response);
-            } catch (error) {
-                console.error('Error sending email:', error);
-            }
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching vaccination records:', error);
-    });
+//                 // Send email
+//                 const info = await transporter.sendMail(mailOptions);
+//                 console.log('Email sent:', info.response);
+//             } catch (error) {
+//                 console.error('Error sending email:', error);
+//             }
+//         }
+//     })
+//     .catch(error => {
+//         console.error('Error fetching vaccination records:', error);
+//     });
 
 
 
