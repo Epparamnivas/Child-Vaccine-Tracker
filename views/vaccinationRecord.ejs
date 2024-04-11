@@ -1,74 +1,151 @@
 <%- include('layouts/header'); -%>
-<%- include('layouts/nav2'); -%>
+    <%- include('layouts/nav2'); -%>
 
-<div class="vaccinationRecords" style="text-align: center;">
-    <p>Vaccination Record of : <b><%= childName %></b></p>
-    
-    <% if (vaccinations && vaccinations.length > 0) { %>
-        <% vaccinations.forEach((vaccination, index) => { %>
-            <div class="vaccinationRecord" style="margin: 0 auto; width: 90%;">
-                <table class="vaccinationTable" >
-                    <tr>
-                        <th>Sl.No</th>
-                        <th>Vaccination Name</th>
-                        <th>Vaccination Date</th>
-                        <th>Vaccination By</th>
-                        <th>Vaccination Place</th>
-                        <th>Suggested Next Vaccination Date</th>
-                        <th>Vaccination Against</th>
-                        <th>Modify</th>
-                    </tr>
-                    <tr>
-                        <td><%= index + 1 %></td>
-                        <td><%= vaccination.vaccinationName %></td>
-                        <td><%= vaccination.vaccinationDate %></td>
-                        <td><%= vaccination.vaccinationBy %></td>
-                        <td><%= vaccination.vaccinationPlace %></td>
-                        <td><%= vaccination.suggestedNextVaccinationDate %></td>
-                        <td><%= vaccination.vaccinationAgainst %></td>
-                        <td>
-                            <!-- Form to delete the vaccination record -->
-                            <form id="deleteForm<%= index %>" action="/deleteVaccination" method="post">
-                                <input type="hidden" name="vaccinationId" value="<%= vaccination._id %>">
-                                <button type="button" onclick="confirmDelete('<%= index %>')">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                </table>
-                               
-            </div>
-        <% }); %>
-    <% } else { %>
-        <p>No vaccination records found for this child.</p>
-    <% } %>
-    <!-- Define getAge function within the same script block -->
-    <p>Your Child <b><%= childName %></b> is <b><%= childage.years %> years <%= childage.months %> months old.</b></p>
-</div>
+        <div class="vaccinationRecords" style="text-align: center;">
+            <p>Vaccination Record of : <b>
+                    <%= childName %>
+                </b></p>
 
-<br><br><br>
+            <% if (vaccinations && vaccinations.length> 0) { %>
+                <% vaccinations.forEach((vaccination, index)=> { %>
+                    <div class="vaccinationRecord" style="margin: 0 auto; width: 90%;">
+                        <table class="vaccinationTable">
+                            <tr>
+                                <th>Sl.No</th>
+                                <th>Vaccination Name</th>
+                                <th>Vaccination Date</th>
+                                <th>Vaccination By</th>
+                                <th>Vaccination Place</th>
+                                <th>Suggested Next Vaccination Date</th>
+                                <th>Vaccination Against</th>
+                                <th>Modify</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <%= index + 1 %>
+                                </td>
+                                <td>
+                                    <%= vaccination.vaccinationName %>
+                                </td>
+                                <td>
+                                    <%= vaccination.vaccinationDate %>
+                                </td>
+                                <td>
+                                    <%= vaccination.vaccinationBy %>
+                                </td>
+                                <td>
+                                    <%= vaccination.vaccinationPlace %>
+                                </td>
+                                <td>
+                                    <%= vaccination.suggestedNextVaccinationDate %>
+                                </td>
+                                <td>
+                                    <%= vaccination.vaccinationAgainst %>
+                                </td>
+                                <td>
+                                    <!-- Form to delete the vaccination record -->
+                                    <form id="deleteForm<%= index %>" action="/deleteVaccination" method="post">
+                                        <input type="hidden" name="vaccinationId" value="<%= vaccination._id %>">
+                                        <button type="button" onclick="confirmDelete('<%= index %>')">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
 
-<%- include('layouts/footer'); -%>
+                    </div>
+                    <% }); %>
+                        <% } else { %>
+                            <p>No vaccination records found for this child.</p>
+                            <% } %>
+                                <!-- Define getAge function within the same script block -->
+                                <p>Your Child <b>
+                                        <%= childName %>
+                                    </b> is <b>
+                                        <%= childage.years %> years <%= childage.months %> months old.
+                                    </b></p>
 
-<style>
-    .vaccinationTable {
-        border-collapse: collapse;
-        width: 100%;
-    }
+        </div>
+        <div class="actualVacciantions">
+            <h2 style="padding-top: .2em; text-align: center;border-top: 3px solid #487795; text-decoration:underline;">
+                Annual vaccinations
+            </h2>
+            <section>
+                <h3 ">
+                    2 months old :
+                </h3>
+                <ul>
+                    <li><strong>DTaP-IPV-Hib: </strong>Diphtheria, Tetanus, Pertussis (Whooping
+                        Cough), Polio, Haemophilus Influenzae type B (Hib)</li>
+                    <li><strong>Pneu-C-13: </strong>Pneumococcal</li>
+                    <li><strong>Rota: </strong>Rotavirus</li>
+                </ul>
+            </section>
+            <section >
+                <h3>4 months old :</h3>
+                <ul>
+                    <li><strong>DTaP-IPV-Hib: </strong>Diphtheria, Tetanus, Pertussis (Whooping Cough), Polio,
+                        Haemophilus Influenzae type B (Hib)</li>
+                    <li><strong>Pneu-C-13: </strong>Pneumococcal</li>
+                    <li><strong>Rota: </strong>Rotavirus</li>
+                </ul>
+                <h3>6 months old :</h3>
+                <ul>
+                    <li><strong>DTaP-IPV-Hib: </strong>Diphtheria, Tetanus, Pertussis (Whooping Cough), Polio,
+                        Haemophilus Influenzae type B (Hib)</li>
+                    <li><strong>Rota: </strong>Rotavirus</li>
+                </ul>
+                <h3>12 months old :</h3>
+                <ul>
+                    <li><strong>Men-C-C: </strong>Meningococcal Disease</li>
+                    <li><strong>MMR: </strong>Measles, Mumps, Rubella</li>
+                    <li><strong>Pneu-C-13: </strong>Pneumococcal</li>
+                </ul>
+                <h3>15 months old :</h3>
+                <ul>
+                    <li><strong>Var: </strong>Varicella (Chickenpox)</li>
+                </ul>
+                <h3>18 months old :</h3>
+                <ul>
+                    <li>
+                        <strong>DTaP-IPV-Hib: </strong>Diphtheria, Tetanus, Pertussis (Whooping Cough), Polio,
+                        Haemophilus Influenzae type B (Hib)
+                    </li>
+                </ul>
+                <h3>4-6 years :</h3>
+                <ul>
+                    <li><strong>MMRV: </strong>Measles, Mumps, Rubella, Varicella (Chickenpox)</li>
+                    <li><strong>Tdap-IPV: </strong>Tetanus, Diphtheria, Pertussis (Whooping Cough), Polio</li>
+                </ul>
+            </section>
 
-    .vaccinationTable th, .vaccinationTable td {
-        border : 1px solid #000;
-        text-align: center;
-    }
-    .vaccinationTable th {
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-</style>
+        </div>
 
-<script>
-    function confirmDelete(index) {
-        if (confirm("Are you sure you want to delete this vaccination record?")) {
-            document.getElementById('deleteForm' + index).submit();
-        }
-    }
-</script>
+        <br><br><br>
+
+        <%- include('layouts/footer'); -%>
+
+            <style>
+                .vaccinationTable {
+                    border-collapse: collapse;
+                    width: 100%;
+                }
+
+                .vaccinationTable th,
+                .vaccinationTable td {
+                    border: 1px solid #000;
+                    text-align: center;
+                }
+
+                .vaccinationTable th {
+                    padding-left: 5px;
+                    padding-right: 5px;
+                }
+            </style>
+
+            <script>
+                function confirmDelete(index) {
+                    if (confirm("Are you sure you want to delete this vaccination record?")) {
+                        document.getElementById('deleteForm' + index).submit();
+                    }
+                }
+            </script>

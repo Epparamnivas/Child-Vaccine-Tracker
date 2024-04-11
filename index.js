@@ -6,7 +6,7 @@ const path = require('path');
 var vaccineTracker = express();
 var bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
-const {check, validationResult} = require('express-validator');
+const { check, validationResult } = require('express-validator');
 
 // Set up the view engine to use EJS
 vaccineTracker.set('view engine', 'ejs');
@@ -73,19 +73,19 @@ const Parent_details = mongoose.model('parentsdetails', new mongoose.Schema({
 // Vaccination
 const vaccination_details = mongoose.model('Vacciantiondetails', new mongoose.Schema({
     vaccinationName: String,
-   vaccinationAgainst: String,
-   vaccinationDate: String,
-   vaccinationBy: String,
-   vaccinationPlace: String,
-   suggestedNextVaccinationDate: String,
-   child_Id: {
-       type: mongoose.Schema.Types.ObjectId,
-       ref: 'childrendetails'
-   },
-   parent_Id: {
-       type: mongoose.Schema.Types.ObjectId,
-       ref: 'parentsdetails'
-   }
+    vaccinationAgainst: String,
+    vaccinationDate: String,
+    vaccinationBy: String,
+    vaccinationPlace: String,
+    suggestedNextVaccinationDate: String,
+    child_Id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'childrendetails'
+    },
+    parent_Id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'parentsdetails'
+    }
 
 }));
 
@@ -182,60 +182,60 @@ vaccineTracker.post('/parent_registration', loginParentValidation, async (req, r
     }
 });
 
-    //////////////////////////////////////////////////Adult Registration Route//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////Adult Registration Route//////////////////////////////////////////////////////////////
 
-    // Adult Registration Validation
-    const adultRegistrationValidation = [
-        check('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters long'),
-        check('username').isLength({ min: 6 }).withMessage('Username must be at least 6 characters long'),
-        check('mobileNumber').notEmpty().withMessage('Invalid mobile number'), // Validate mobile number
-        check('email').isEmail().withMessage('Invalid email address'), // Validate email
-        check('address').notEmpty().withMessage('Address is required') // Validate address
-    ];
+// Adult Registration Validation
+const adultRegistrationValidation = [
+    check('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters long'),
+    check('username').isLength({ min: 6 }).withMessage('Username must be at least 6 characters long'),
+    check('mobileNumber').notEmpty().withMessage('Invalid mobile number'), // Validate mobile number
+    check('email').isEmail().withMessage('Invalid email address'), // Validate email
+    check('address').notEmpty().withMessage('Address is required') // Validate address
+];
 
-    // Adult Registration Route
-    vaccineTracker.post('/adult_registration',async (req, res, next) => {
-        // Validate dob in the request body
-        const dob = new Date(req.body.dob); // Parse the date of birth from the request body
-        const today = new Date();
-        let age = today.getFullYear() - dob.getFullYear();
-        const monthDiff = today.getMonth() - dob.getMonth();
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-            age--;
-        }
-        if (age < 18) {
-            return res.status(400).json({ errors: [{ msg: 'You must be at least 18 years old to register as an adult', param: 'dob' }] });
-        }
+// Adult Registration Route
+vaccineTracker.post('/adult_registration', async (req, res, next) => {
+    // Validate dob in the request body
+    const dob = new Date(req.body.dob); // Parse the date of birth from the request body
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+        age--;
+    }
+    if (age < 18) {
+        return res.status(400).json({ errors: [{ msg: 'You must be at least 18 years old to register as an adult', param: 'dob' }] });
+    }
 
-        // Get details from the registration form
-        const adultRegistrationData = {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            dob: req.body.dob, // Date of birth
-            age: age,
-            mobileNumber: req.body.mobileNumber,
-            email: req.body.email,
-            address: req.body.address,
-            username: req.body.username,
-            password: req.body.password
-        };
+    // Get details from the registration form
+    const adultRegistrationData = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        dob: req.body.dob, // Date of birth
+        age: age,
+        mobileNumber: req.body.mobileNumber,
+        email: req.body.email,
+        address: req.body.address,
+        username: req.body.username,
+        password: req.body.password
+    };
 
-        req.session.adultRegistrationData = adultRegistrationData;
+    req.session.adultRegistrationData = adultRegistrationData;
 
-        // Check for existing username
-        const existingUsername = await Adult_details.findOne({ username: adultRegistrationData.username });
-        if (existingUsername) {
-            return res.status(409).send("Username already taken, please choose a different username");
-        }
+    // Check for existing username
+    const existingUsername = await Adult_details.findOne({ username: adultRegistrationData.username });
+    if (existingUsername) {
+        return res.status(409).send("Username already taken, please choose a different username");
+    }
 
-        // Hash the password
-        const saltHash = await bcrypt.genSalt(12);
-        adultRegistrationData.password = await bcrypt.hash(adultRegistrationData.password, saltHash);
+    // Hash the password
+    const saltHash = await bcrypt.genSalt(12);
+    adultRegistrationData.password = await bcrypt.hash(adultRegistrationData.password, saltHash);
 
-        // Create the adult document in the database
-        const createdUser = await Adult_details.create(adultRegistrationData);
-        res.render("adult_registration"); // Render login page after successful registration
-    });
+    // Create the adult document in the database
+    const createdUser = await Adult_details.create(adultRegistrationData);
+    res.render("adult_registration"); // Render login page after successful registration
+});
 
 /////////////////////////////////////////////////////////////////login for parent//////////////////////////////////////////////////////////
 
@@ -294,13 +294,13 @@ vaccineTracker.post('/adultLoginHome', async (req, res) => {
     try {
         const userCheck = await Adult_details.findOne({ username: req.body.userName });
         console.log(" adult detailsMatch:", userCheck);
-        req.session.userCheck =  userCheck;
+        req.session.userCheck = userCheck;
 
         if (!userCheck) {
             console.log("User not found:", req.body.userName);
             return res.status(401).send('Invalid Username');
         }
-         
+
 
         const isPasswordMatch = await bcrypt.compare(req.body.password, userCheck.password);
         console.log("Password Match:", isPasswordMatch);
@@ -407,7 +407,7 @@ vaccineTracker.post('/add_child_vaccination', async (req, res) => {
         return res.status(409).send("Child's details already exist, please try with different details.");
     } else {
         //posting the details into mongo DB by Creating the child document in the child collection
-        console.log('Created Child started:'); 
+        console.log('Created Child started:');
         const createdUser = await child_details.create(childRegistrationData);
         console.log('Created Child:', createdUser.parent_Id); // Log created child document for debugging
 
@@ -416,7 +416,7 @@ vaccineTracker.post('/add_child_vaccination', async (req, res) => {
         const childDOB = createdUser.dob;
         req.session.childID = childID;
         req.session.childDOB = childDOB;
-        
+
         // Render the addChildDetails template with parent ID
         res.render('addChildDetails', { registrationDetails: { _id: parentID } });
     }
@@ -427,7 +427,7 @@ vaccineTracker.post('/add_child_vaccination', async (req, res) => {
 //-------------------------------------------------------------------------------------------------------//
 vaccineTracker.post('/add_Vaccination_Details', async (req, res) => {
     try {
-       
+
         const childId = req.body.childId; // Retrieve child ID from query string
         console.error(" child id for the session :  " + childId);
 
@@ -455,15 +455,15 @@ vaccineTracker.post('/add_Vaccination_Details', async (req, res) => {
             child_Id: childId, // Associate vaccination with child using child ID
             parent_Id: parentId // Associate vaccination with parent using parent ID
         };
-        console.log("vaccination details : "+JSON.stringify(vaccinationData));
-       await vaccination_details.create(vaccinationData);
-        
+        console.log("vaccination details : " + JSON.stringify(vaccinationData));
+        await vaccination_details.create(vaccinationData);
+
         res.render('addVaccinationDetails', { child: { _id: childId } });
 
         // Create vaccination document in the database
-       // const createdVaccination = await vaccination_details.create(vaccinationData);
-       // res.status(201).json({ message: "Vaccination details added successfully" });
-       
+        // const createdVaccination = await vaccination_details.create(vaccinationData);
+        // res.status(201).json({ message: "Vaccination details added successfully" });
+
 
     } catch (error) {
         console.error('Error adding vaccination details:', error);
@@ -474,9 +474,9 @@ vaccineTracker.post('/add_Vaccination_Details', async (req, res) => {
 
 ////////////////////////////////////////////////adding Vaccination details for adult///////////////////////////////////////
 //-------------------------------------------------------------------------------------------------------//
-vaccineTracker.post('/adultVaccinationDetails', async (req, res) => {
+vaccineTracker.post('adultVaccinationDetails', async (req, res) => {
     try {
-       
+
         const adultId = req.session.userCheck_id; // Retrieve child ID from query string
         console.error(" child id for the session :  " + adultId);
 
@@ -485,7 +485,7 @@ vaccineTracker.post('/adultVaccinationDetails', async (req, res) => {
             return res.status(404).send('Child not found');
         }
 
-        
+
         console.error(" parentId id for the session :  " + adultId);
 
         // Check if parentID is available in the session
@@ -502,17 +502,17 @@ vaccineTracker.post('/adultVaccinationDetails', async (req, res) => {
             vaccinationPlace: req.body.vaccinationPlace,
             suggestedNextVaccinationDate: req.body.suggestedNextVaccinationDate, // Retrieve suggestedNextVaccinationDate from the request body
             adult_Id: adultId, // Associate vaccination with child using child ID
-            
+
         };
-        console.log("vaccination details : "+JSON.stringify(vaccinationData));
-       await vaccination_details.create(vaccinationData);
-        
+        console.log("vaccination details : " + JSON.stringify(vaccinationData));
+        await vaccination_details.create(vaccinationData);
+
         res.render('adultVaccinationDetails', { adult: { _id: adultId } });
 
         // Create vaccination document in the database
-       // const createdVaccination = await vaccination_details.create(vaccinationData);
-       // res.status(201).json({ message: "Vaccination details added successfully" });
-       
+        // const createdVaccination = await vaccination_details.create(vaccinationData);
+        // res.status(201).json({ message: "Vaccination details added successfully" });
+
 
     } catch (error) {
         console.error('Error adding vaccination details:', error);
@@ -522,7 +522,7 @@ vaccineTracker.post('/adultVaccinationDetails', async (req, res) => {
 
 
 ////////////////////////////////////////////////////// Delete Child Route////////////////////////////////////////////////
-vaccineTracker.post('/deleteChild',async (req, res) => {
+vaccineTracker.post('/deleteChild', async (req, res) => {
     try {
         const childId = req.body.childId;
 
@@ -585,22 +585,22 @@ vaccineTracker.post('/deleteVaccination', async (req, res) => {
 
 vaccineTracker.post('/delete', async (req, res) => {
     try {
-         // Extract parent ID from the request body
-         const parentId = req.body.parentId;
-         console.log('Parent ID:', parentId);
+        // Extract parent ID from the request body
+        const parentId = req.body.parentId;
+        console.log('Parent ID:', parentId);
 
-         // Perform deletion of children and vaccinations associated with the parent
-         await child_details.deleteMany({ parent_Id: parentId });
-         await vaccination_details.deleteMany({ parent_Id: parentId });
-         await Parent_details.findByIdAndDelete(parentId);
+        // Perform deletion of children and vaccinations associated with the parent
+        await child_details.deleteMany({ parent_Id: parentId });
+        await vaccination_details.deleteMany({ parent_Id: parentId });
+        await Parent_details.findByIdAndDelete(parentId);
 
-         // Send a success response
-         console.log('Children and vaccinations deleted successfully.');
-         res.redirect('/adminLoginHome');
-     } catch (error) {
-         console.error('Error deleting children and vaccinations:', error);
-         res.status(500).send('Error deleting children and vaccinations.');
-     }
+        // Send a success response
+        console.log('Children and vaccinations deleted successfully.');
+        res.redirect('/adminLoginHome');
+    } catch (error) {
+        console.error('Error deleting children and vaccinations:', error);
+        res.status(500).send('Error deleting children and vaccinations.');
+    }
 });
 
 
@@ -619,7 +619,7 @@ vaccineTracker.post('/', [
 });
 
 /////////////////////////////////////////////////////////Setup Admin Database Model//////////////////////////////////////////////////////
-const Admin = mongoose.model('admindetails',new mongoose.Schema({
+const Admin = mongoose.model('admindetails', new mongoose.Schema({
     userName: String,
     password: String
 }));
@@ -635,11 +635,11 @@ vaccineTracker.get('/vaccinationRecord', async (req, res) => {
 
         // Fetch child details from the database based on child ID
         const child = await child_details.findById(childId);
-        
+
         // If child is found, get the child's name and date of birth
         let childName = 'Unknown';
         let childDOB = 'Unknown';
-        let childage =  'Unknown';
+        let childage = 'Unknown';
         if (child) {
             childName = `${child.firstName} ${child.lastName}`;
             childDOB = child.dateOfBirth;
@@ -660,7 +660,7 @@ vaccineTracker.get('/vaccinationRecord', async (req, res) => {
 });
 
 // Function to calculate age from date of birth
-function getAge(dateString)  {
+function getAge(dateString) {
     var today = new Date();
     var birthDate = new Date(dateString);
     var years = today.getFullYear() - birthDate.getFullYear();
@@ -706,7 +706,7 @@ vaccineTracker.get('/adminLoginHome', async (req, res) => {
     try {
         // Fetch all parents from the database
         const parents = await Parent_details.find({});
-        
+
         // Iterate over each parent and fetch their respective children and vaccination details
         const parentData = [];
         for (const parent of parents) {
@@ -725,23 +725,23 @@ vaccineTracker.get('/adminLoginHome', async (req, res) => {
 
 //////////////////////////////////////////////////////// Route Handler//////////////////////////////////////////////////////
 
-vaccineTracker.get('/parentLoginHome', async(req, res) => {
+vaccineTracker.get('/parentLoginHome', async (req, res) => {
     console.log("get parent session:" + req.session);
     console.log("get parent reg :" + req.session.registrationDetails);
     // Check for session and registrationDetails existence
     if (req.session && req.session.registrationDetails) {
-        console.log("get parent reg if caluse :" +req.session.registrationDetails );
+        console.log("get parent reg if caluse :" + req.session.registrationDetails);
         const registrationDetails = req.session.registrationDetails; // Retrieve from session
-        console.log("get parent reg if caluse :" +registrationDetails);
+        console.log("get parent reg if caluse :" + registrationDetails);
         const registrationDetailsStringified = JSON.stringify(registrationDetails);
         console.log("Stringified registrationDetails:", registrationDetailsStringified);
 
         const parentID = registrationDetails._id;
-       
+
         // Fetch children details based on parent ID
         const children = await child_details.find({ parent_Id: parentID });
 
-        res.render('parentLoginHome', { registrationDetails: registrationDetails, children: children });      
+        res.render('parentLoginHome', { registrationDetails: registrationDetails, children: children });
 
     } else {
 
@@ -753,24 +753,24 @@ vaccineTracker.get('/parentLoginHome', async(req, res) => {
 //////////////////////////////////// Route handler for addVaccinationDetails view with the child object////////////////////////////////
 
 vaccineTracker.get('/addVaccinationDetails', async (req, res) => {
-    try {   
+    try {
         // Retrieve child ID from query parameters
         const childId = req.query.childId;
         console.error(" child getting id from the session :  " + childId);
- // Find the child by ID
- const child = await child_details.findById(childId);
-console.log("child details"+child);
+        // Find the child by ID
+        const child = await child_details.findById(childId);
+        console.log("child details" + child);
         // Check if childId is provided
         if (child) {
-            console.log("child details id"+childId);
+            console.log("child details id" + childId);
             // Render the addVaccinationDetails.ejs template and pass the child object
             res.render('addvaccinationDetails', { child: { _id: childId } });
         } else {
             // Handle case where child is not found
             res.status(404).send('Child not found');
-          }
+        }
 
-       
+
     } catch (error) {
         console.error('Error rendering addVaccinationDetails:', error);
         res.status(500).send('Internal server error');
@@ -828,7 +828,7 @@ vaccineTracker.get('/login-admin', (req, res) => {
 // It logs the error stack trace to the console for debugging purposes
 // and sends a response with a 500 status code and a generic message to the user
 
-vaccineTracker.use(function(err, req, res, next) {
+vaccineTracker.use(function (err, req, res, next) {
     console.error(err.stack);
     res.status(500).send('Something broke!');
 });
@@ -836,75 +836,112 @@ vaccineTracker.use(function(err, req, res, next) {
 
 /////////////////////////////////////////////////////////mailNotification Configuarations////////////////////////////////////////////
 //=================================================================================================================================//
-// const cron = require('node-cron');
-// const nodemailer = require('nodemailer');
-// // Function to send email notification
-// const transporter = nodemailer.createTransport({
-//     service: 'Gmail',
-//     auth: {
-//         user: 'childvaccinationtracker1@gmail.com',
-//         pass: 'cqwo zfwk utvj qjkj'
-//     }
-// });
+const nodemailer = require('nodemailer');
 
-// // Fetch all parent records from the database
-// vaccination_details.find({})
-//     .then(async vaccinations => {
-//         // Check if there are any vaccination records
-//         if (vaccinations.length === 0) {
-//             console.log('No vaccination records found.');
-//             return;
-//         }
+// Create Nodemailer transporter
+const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: 'childvaccinationtracker1@gmail.com',
+        pass: 'cqwo zfwk utvj qjkj'
+    }
+});
 
-//         // Iterate over each vaccination record
-//         for (const vaccination of vaccinations) {
-//             try {
-//                 // Find parent details for the current vaccination
-//                 const parent = await Parent_details.findById(vaccination.parent_Id);
-//                 const child = await child_details.findById(vaccination.child_Id);
+// Function to calculate age
+function getAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var years = today.getFullYear() - birthDate.getFullYear();
+    var months = today.getMonth() - birthDate.getMonth();
+    if (months < 0 || (months === 0 && today.getDate() < birthDate.getDate())) {
+        years--;
+        months += 12;
+    }
+    return { years: years, months: months };
+}
 
-//                 // Check if parent exists
-//                 if (!parent) {
-//                     console.log(`Parent not found for vaccination ID: ${vaccination._id}`);
-//                     continue;
-//                 }
+// Fetch all vaccination records from the database
+vaccination_details.find({})
+    .then(async vaccinations => {
+        if (vaccinations.length === 0) {
+            console.log('No vaccination records found.');
+            return;
+        }
 
-//                 // Compose email subject with parent's name
-//                 const subject = `Vaccination Notification for ${parent.firstName} ${parent.lastName}`;
+        for (const vaccination of vaccinations) {
+            try {
+                const parent = await Parent_details.findById(vaccination.parent_Id);
+                const child = await child_details.findById(vaccination.child_Id);
+                
+                // Check if child exists
+                if (!child) {
+                    console.log(`Child not found for vaccination ID: ${vaccination._id}`);
+                    continue;
+                }
+                
+                const childage = getAge(child.dateOfBirth);
 
-//                 // Compose email body
-//                 let text = `Dear ${parent.firstName} ${parent.lastName},\n\n`;
-//                 text += `This is a notification message regarding your child ${child.firstName} ${child.lastName} Vaccination:\n\n`;
+                if (!parent) {
+                    console.log(`Parent not found for vaccination ID: ${vaccination._id}`);
+                    continue;
+                }
 
-//                 // Include vaccination details
-//                 text += `- Vaccination Name: ${vaccination.vaccinationName}\n`;
-//                 text += `- Vaccination Date: ${vaccination.vaccinationDate}\n\n`;
-//                 text += `- Vaccination for: ${vaccination.vaccinationAgainst}\n\n`;
-//                 text += `- NEXT Vaccination Date: ${vaccination.suggestedNextVaccinationDate}\n\n`;
+                // Compose email subject with parent's name
+                const subject = `Vaccination Notification for ${parent.firstName} ${parent.lastName}`;
 
-//                 text += `Sincerely,\nThe Vaccine Tracker Team`;
+                // Compose email body in HTML format
+                let html = `<p>Dear ${parent.firstName} ${parent.lastName},</p>`;
+                html += `<p>This is a notification message regarding your child ${child.firstName} ${child.lastName}'s Vaccination:</p>`;
 
-//                 // Configure mail options
-//                 const mailOptions = {
-//                     from: 'childvaccinationtracker1@gmail.com',
-//                     to: parent.email,
-//                     subject: subject,
-//                     text: text
-//                 };
+                // Include vaccination details
+                html += `<p>- Vaccination Name: ${vaccination.vaccinationName}</p>`;
+                html += `<p>- Vaccination Date: ${vaccination.vaccinationDate}</p>`;
+                html += `<p>- Vaccination Against: ${vaccination.vaccinationAgainst}</p>`;
+                html += `<p>- Next Vaccination Date: <strong>${vaccination.suggestedNextVaccinationDate}</strong></p>`;
 
-//                 // Send email
-//                 const info = await transporter.sendMail(mailOptions);
-//                 console.log('Email sent:', info.response);
-//             } catch (error) {
-//                 console.error('Error sending email:', error);
-//             }
-//         }
-//     })
-//     .catch(error => {
-//         console.error('Error fetching vaccination records:', error);
-//     });
+                // Include child's age
+                if (childage.years > 0) {
+                    html += `<p>Your child is ${childage.years} years and ${childage.months} months old.</p>`;
+                } else {
+                    html += `<p>Your child is ${childage.months} months old.</p>`;
+                }
 
+                // Include additional vaccination details
+                html += `<p><strong>Annual vaccinations:</strong></p>`;
+                html += `<p>- 2 months old:<br>`;
+                html += `- <strong>DTaP-IPV-Hib:</strong> Diphtheria, Tetanus, Pertussis (Whooping Cough), Polio, Haemophilus Influenzae type B (Hib)<br>`;
+                html += `- <strong>Pneu-C-13:</strong> Pneumococcal<br>`;
+                html += `- <strong>Rota:</strong> Rotavirus</p>`;
 
+                html += `<p>- 4 months old:<br>`;
+                html += `- <strong>DTaP-IPV-Hib:</strong> Diphtheria, Tetanus, Pertussis (Whooping Cough), Polio, Haemophilus Influenzae type B (Hib)<br>`;
+                html += `- <strong>Pneu-C-13:</strong> Pneumococcal<br>`;
+                html += `- <strong>Rota:</strong> Rotavirus</p>`;
+
+                // Include other vaccination sections as needed
+
+                // End of email
+                html += `<p>Sincerely,<br>The Vaccine Tracker Team</p>`;
+
+                // Configure mail options
+                const mailOptions = {
+                    from: 'childvaccinationtracker1@gmail.com',
+                    to: parent.email,
+                    subject: subject,
+                    html: html
+                };
+
+                // Send email
+                const info = await transporter.sendMail(mailOptions);
+                console.log('Email sent:', info.response);
+            } catch (error) {
+                console.error('Error sending email:', error);
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching vaccination records:', error);
+    });
 
 // Execute Website Using Port Number for Localhost
 // Start Server

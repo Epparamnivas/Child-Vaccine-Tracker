@@ -2,7 +2,7 @@ html,
 body {
     max-width: 100%;
     overflow-x: hidden;
-    color: #ffffff;
+    color: #000000;
     text-align: center;
     margin: 2px;
     font-family: Chakra Petch;
@@ -459,6 +459,11 @@ footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+.actualVacciantions{
+    color: black;
+    text-align: left;
+    padding-left: 25px;
 }
 
 /*--------------------------------------Addvaccination----------------------------------*/
