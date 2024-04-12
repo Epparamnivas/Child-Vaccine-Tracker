@@ -111,7 +111,8 @@ const Adult_details = mongoose.model('adultdetails', new mongoose.Schema({
     firstName: String,
     lastName: String,
     dob: String,
-    mobileNumber: String, // Add mobile number field
+    mobileNumber: String,
+    sex : String, // Add mobile number field
     email: String, // Add email field
     address: String, // Add address field
     username: String,
@@ -213,6 +214,7 @@ vaccineTracker.post('/adult_registration', async (req, res, next) => {
         lastName: req.body.lastName,
         dob: req.body.dob, // Date of birth
         age: age,
+        sex : req.body.sex,
         mobileNumber: req.body.mobileNumber,
         email: req.body.email,
         address: req.body.address,
@@ -474,7 +476,7 @@ vaccineTracker.post('/add_Vaccination_Details', async (req, res) => {
 
 ////////////////////////////////////////////////adding Vaccination details for adult///////////////////////////////////////
 //-------------------------------------------------------------------------------------------------------//
-vaccineTracker.post('adultVaccinationDetails', async (req, res) => {
+vaccineTracker.post('/adultVaccinationDetails', async (req, res) => {
     try {
 
         const adultId = req.session.userCheck_id; // Retrieve child ID from query string
@@ -836,112 +838,112 @@ vaccineTracker.use(function (err, req, res, next) {
 
 /////////////////////////////////////////////////////////mailNotification Configuarations////////////////////////////////////////////
 //=================================================================================================================================//
-const nodemailer = require('nodemailer');
+// const nodemailer = require('nodemailer');
 
-// Create Nodemailer transporter
-const transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-        user: 'childvaccinationtracker1@gmail.com',
-        pass: 'cqwo zfwk utvj qjkj'
-    }
-});
+// // Create Nodemailer transporter
+// const transporter = nodemailer.createTransport({
+//     service: 'Gmail',
+//     auth: {
+//         user: 'childvaccinationtracker1@gmail.com',
+//         pass: 'cqwo zfwk utvj qjkj'
+//     }
+// });
 
-// Function to calculate age
-function getAge(dateString) {
-    var today = new Date();
-    var birthDate = new Date(dateString);
-    var years = today.getFullYear() - birthDate.getFullYear();
-    var months = today.getMonth() - birthDate.getMonth();
-    if (months < 0 || (months === 0 && today.getDate() < birthDate.getDate())) {
-        years--;
-        months += 12;
-    }
-    return { years: years, months: months };
-}
+// // Function to calculate age
+// function getAge(dateString) {
+//     var today = new Date();
+//     var birthDate = new Date(dateString);
+//     var years = today.getFullYear() - birthDate.getFullYear();
+//     var months = today.getMonth() - birthDate.getMonth();
+//     if (months < 0 || (months === 0 && today.getDate() < birthDate.getDate())) {
+//         years--;
+//         months += 12;
+//     }
+//     return { years: years, months: months };
+// }
 
-// Fetch all vaccination records from the database
-vaccination_details.find({})
-    .then(async vaccinations => {
-        if (vaccinations.length === 0) {
-            console.log('No vaccination records found.');
-            return;
-        }
+// // Fetch all vaccination records from the database
+// vaccination_details.find({})
+//     .then(async vaccinations => {
+//         if (vaccinations.length === 0) {
+//             console.log('No vaccination records found.');
+//             return;
+//         }
 
-        for (const vaccination of vaccinations) {
-            try {
-                const parent = await Parent_details.findById(vaccination.parent_Id);
-                const child = await child_details.findById(vaccination.child_Id);
+//         for (const vaccination of vaccinations) {
+//             try {
+//                 const parent = await Parent_details.findById(vaccination.parent_Id);
+//                 const child = await child_details.findById(vaccination.child_Id);
                 
-                // Check if child exists
-                if (!child) {
-                    console.log(`Child not found for vaccination ID: ${vaccination._id}`);
-                    continue;
-                }
+//                 // Check if child exists
+//                 if (!child) {
+//                     console.log(`Child not found for vaccination ID: ${vaccination._id}`);
+//                     continue;
+//                 }
                 
-                const childage = getAge(child.dateOfBirth);
+//                 const childage = getAge(child.dateOfBirth);
 
-                if (!parent) {
-                    console.log(`Parent not found for vaccination ID: ${vaccination._id}`);
-                    continue;
-                }
+//                 if (!parent) {
+//                     console.log(`Parent not found for vaccination ID: ${vaccination._id}`);
+//                     continue;
+//                 }
 
-                // Compose email subject with parent's name
-                const subject = `Vaccination Notification for ${parent.firstName} ${parent.lastName}`;
+//                 // Compose email subject with parent's name
+//                 const subject = `Vaccination Notification for ${parent.firstName} ${parent.lastName}`;
 
-                // Compose email body in HTML format
-                let html = `<p>Dear ${parent.firstName} ${parent.lastName},</p>`;
-                html += `<p>This is a notification message regarding your child ${child.firstName} ${child.lastName}'s Vaccination:</p>`;
+//                 // Compose email body in HTML format
+//                 let html = `<p>Dear ${parent.firstName} ${parent.lastName},</p>`;
+//                 html += `<p>This is a notification message regarding your child ${child.firstName} ${child.lastName}'s Vaccination:</p>`;
 
-                // Include vaccination details
-                html += `<p>- Vaccination Name: ${vaccination.vaccinationName}</p>`;
-                html += `<p>- Vaccination Date: ${vaccination.vaccinationDate}</p>`;
-                html += `<p>- Vaccination Against: ${vaccination.vaccinationAgainst}</p>`;
-                html += `<p>- Next Vaccination Date: <strong>${vaccination.suggestedNextVaccinationDate}</strong></p>`;
+//                 // Include vaccination details
+//                 html += `<p>- Vaccination Name: ${vaccination.vaccinationName}</p>`;
+//                 html += `<p>- Vaccination Date: ${vaccination.vaccinationDate}</p>`;
+//                 html += `<p>- Vaccination Against: ${vaccination.vaccinationAgainst}</p>`;
+//                 html += `<p>- Next Vaccination Date: <strong>${vaccination.suggestedNextVaccinationDate}</strong></p>`;
 
-                // Include child's age
-                if (childage.years > 0) {
-                    html += `<p>Your child is ${childage.years} years and ${childage.months} months old.</p>`;
-                } else {
-                    html += `<p>Your child is ${childage.months} months old.</p>`;
-                }
+//                 // Include child's age
+//                 if (childage.years > 0) {
+//                     html += `<p>Your child is ${childage.years} years and ${childage.months} months old.</p>`;
+//                 } else {
+//                     html += `<p>Your child is ${childage.months} months old.</p>`;
+//                 }
 
-                // Include additional vaccination details
-                html += `<p><strong>Annual vaccinations:</strong></p>`;
-                html += `<p>- 2 months old:<br>`;
-                html += `- <strong>DTaP-IPV-Hib:</strong> Diphtheria, Tetanus, Pertussis (Whooping Cough), Polio, Haemophilus Influenzae type B (Hib)<br>`;
-                html += `- <strong>Pneu-C-13:</strong> Pneumococcal<br>`;
-                html += `- <strong>Rota:</strong> Rotavirus</p>`;
+//                 // Include additional vaccination details
+//                 html += `<p><strong>Annual vaccinations:</strong></p>`;
+//                 html += `<p>- 2 months old:<br>`;
+//                 html += `- <strong>DTaP-IPV-Hib:</strong> Diphtheria, Tetanus, Pertussis (Whooping Cough), Polio, Haemophilus Influenzae type B (Hib)<br>`;
+//                 html += `- <strong>Pneu-C-13:</strong> Pneumococcal<br>`;
+//                 html += `- <strong>Rota:</strong> Rotavirus</p>`;
 
-                html += `<p>- 4 months old:<br>`;
-                html += `- <strong>DTaP-IPV-Hib:</strong> Diphtheria, Tetanus, Pertussis (Whooping Cough), Polio, Haemophilus Influenzae type B (Hib)<br>`;
-                html += `- <strong>Pneu-C-13:</strong> Pneumococcal<br>`;
-                html += `- <strong>Rota:</strong> Rotavirus</p>`;
+//                 html += `<p>- 4 months old:<br>`;
+//                 html += `- <strong>DTaP-IPV-Hib:</strong> Diphtheria, Tetanus, Pertussis (Whooping Cough), Polio, Haemophilus Influenzae type B (Hib)<br>`;
+//                 html += `- <strong>Pneu-C-13:</strong> Pneumococcal<br>`;
+//                 html += `- <strong>Rota:</strong> Rotavirus</p>`;
 
-                // Include other vaccination sections as needed
+//                 // Include other vaccination sections as needed
 
-                // End of email
-                html += `<p>Sincerely,<br>The Vaccine Tracker Team</p>`;
+//                 // End of email
+//                 html += `<p>Sincerely,<br>The Vaccine Tracker Team</p>`;
 
-                // Configure mail options
-                const mailOptions = {
-                    from: 'childvaccinationtracker1@gmail.com',
-                    to: parent.email,
-                    subject: subject,
-                    html: html
-                };
+//                 // Configure mail options
+//                 const mailOptions = {
+//                     from: 'childvaccinationtracker1@gmail.com',
+//                     to: parent.email,
+//                     subject: subject,
+//                     html: html
+//                 };
 
-                // Send email
-                const info = await transporter.sendMail(mailOptions);
-                console.log('Email sent:', info.response);
-            } catch (error) {
-                console.error('Error sending email:', error);
-            }
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching vaccination records:', error);
-    });
+//                 // Send email
+//                 const info = await transporter.sendMail(mailOptions);
+//                 console.log('Email sent:', info.response);
+//             } catch (error) {
+//                 console.error('Error sending email:', error);
+//             }
+//         }
+//     })
+//     .catch(error => {
+//         console.error('Error fetching vaccination records:', error);
+//     });
 
 // Execute Website Using Port Number for Localhost
 // Start Server

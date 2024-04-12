@@ -1,42 +1,67 @@
 <%- include('layouts/header'); -%>
-<%- include('layouts/nav2'); -%>
+    <%- include('layouts/nav2'); -%>
 
-<div class="adultHomeLogin">
-    <h2>Adult Details</h2>
-    <h3>Welcome <%= registrationDetails.firstName %> <%= registrationDetails.lastName %></h3>
+        <div class="adultHomeLogin">
+            <h2>Adult Details</h2>
+            <h3>Welcome <%= registrationDetails.firstName %>
+                    <%= registrationDetails.lastName %>
+            </h3>
 
-    <div class="itemsContainer-adult">
-        <div class="RegDetails-adult">
-            <p>FullName: <b><%= registrationDetails.firstName %> <%= registrationDetails.lastName %></b></p>
-            <p>Email: <b><%= registrationDetails.email %></b></p>
-            <p>Address: <b><%= registrationDetails.address %></b></p>
-            <p>Mobile Number: <b><%= registrationDetails.mobileNumber %></b></p>
-            <p>Gender: <b><%= registrationDetails.sex %></b></p>
+            <div class="itemsContainer-adult">
+                <div class="adultBody">
+                    <div class="RegDetails-adult1">
+                        <p>FullName: <b>
+                                <%= registrationDetails.firstName %>
+                                    <%= registrationDetails.lastName %>
+                            </b></p>
+                        <p>Email: <b>
+                                <%= registrationDetails.email %>
+                            </b></p>
+                        <p>UserName: <b>
+                                <%= registrationDetails.username %>
+                            </b></p>
+                    </div>
+                    <div class="RegDetails-adult2">
+                        <p>Address: <b>
+                                <%= registrationDetails.address %>
+                            </b></p>
+                        <p>Mobile Number: <b>
+                                <%= registrationDetails.mobileNumber %>
+                            </b></p>
+                        <p>Gender: <b>
+                                <%= registrationDetails.sex %>
+                            </b></p>
+                    </div>
+
+                </div>
+                <div class="buttonContainer">
+
+                    <form action="/vaccinationRecord" method="get">
+                        <input type="hidden" name="registrationDetailsId" value="<%= registrationDetails._id %>">
+                        <button type="submit">Vaccination Record</button>
+                    </form>
 
 
-            
-            <form action="/vaccinationRecord" method="get">
-                <input type="hidden" name="registrationDetailsId" value="<%= registrationDetails._id %>">
-                <button type="submit">Vaccination Record</button>
-            </form>
-        </br>
+                    <form action="/adultVaccinationDetails" method="get">
+                        <input type="hidden" name="registrationDetailsId" value="<%= registrationDetails._id %>">
+                        <button type="submit">Add Vaccination</button>
+                    </form>
+                </div>
 
-            <form action="/adultVaccinationDetails" method="get">
-                <input type="hidden" name="registrationDetailsId" value="<%= registrationDetails._id %>">
-                <button type="submit">Add Vaccination</button>
-            </form>
-        </br>
+
+            </div>
+
         </div>
-        
-    </div>
 
 
-<%- include('layouts/footer'); -%>
 
-<script>
-    function confirmDelete(index) {
-        if (confirm("Are you sure you want to delete this vaccination record?")) {
-            document.getElementById('deleteForm' + index).submit();
-        }
-    }
-</script>
+
+        <%- include('layouts/footer'); -%>
+
+            <script>
+                function confirmDelete(index) {
+                    if (confirm("Are you sure you want to delete this vaccination record?")) {
+                        document.getElementById('deleteForm' + index).submit();
+                    }
+                }
+            </script>

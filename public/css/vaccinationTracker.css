@@ -6,11 +6,11 @@ body {
     text-align: center;
     margin: 2px;
     font-family: Chakra Petch;
-    background-color: beige; 
+    background-color: beige;
 }
 
 /*--------------------------------------login page--------------------------------------*/
-.login-area{
+.login-area {
     display: flex;
 }
 
@@ -19,7 +19,7 @@ body {
     text-align: left;
 }
 
-.login-container{   
+.login-container {
     border: green;
     font-family: Chakra Petch;
     font-size: x-large;
@@ -29,10 +29,12 @@ body {
     margin-left: 100px;
     margin-top: 60px;
 }
-#editPages-container tr{
+
+#editPages-container tr {
     font-weight: normal;
 }
-#editPages-container{
+
+#editPages-container {
     border: green;
     border-width: 2px;
     border-style: solid;
@@ -47,23 +49,24 @@ body {
     margin-left: 557px;
     margin-top: 30px;
     height: 400px;
- }
+}
 
-.login-container label{    width: 25%;
+.login-container label {
+    width: 25%;
     display: inline;
     vertical-align: center;
     font-weight: bold;
 }
 
-.login-container a{
+.login-container a {
     color: #000000;
-    text-decoration:none;
+    text-decoration: none;
     font-size: 16px;
 }
 
-.login-container a:hover{
+.login-container a:hover {
     color: green;
-    text-decoration:underline;
+    text-decoration: underline;
 }
 
 input {
@@ -75,21 +78,21 @@ input {
     margin-top: 6px;
     margin-bottom: 16px;
     resize: vertical;
-  }
+}
 
 .break {
     flex-basis: 100%;
     height: 0;
-  }
+}
 
-.login-button{
+.login-button {
     background-color: burlywood;
     font-size: 20px;
     color: #000000;
     border-radius: 10px;
 }
 
-.login-button:hover{
+.login-button:hover {
     background-color: beige;
 }
 
@@ -97,29 +100,29 @@ input {
 
 
 /*--------------------------------------footer page--------------------------------------*/
-  
-footer {   
-    position:relative;
-	text-align: center;
-	color: black;
-	font-weight:bolder;
+
+footer {
+    position: relative;
+    text-align: center;
+    color: black;
+    font-weight: bolder;
     font-style: oblique;
     justify-content: center;
     bottom: 3px;
-    width: 99.5%; 
+    width: 99.5%;
     background-color: burlywood;
     text-transform: uppercase;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     display: flex;
     border: 1px solid crimson;
-    border-radius: 12px; 
+    border-radius: 12px;
     height: 45px;
-  
+
 }
 
 /*--------------------------------------header of pages--------------------------------------*/
 
-.container{
+.container {
     background-color: beige;
     max-width: 100%;
     text-align: center;
@@ -130,31 +133,34 @@ footer {
     justify-content: left;
     font-weight: bold;
 }
-.tag-line{
+
+.tag-line {
     font-size: 32px;
     font-weight: bold;
-    color:#030000;
+    color: #030000;
     padding-bottom: 10px;
     margin: 0px;
     padding-bottom: 0px;
     margin-top: 25px;
 }
-.image-header>img{
+
+.image-header>img {
     height: 109px;
     width: 115px;
     margin-left: 10px;
 }
-.image-header{
+
+.image-header {
     justify-content: center;
 }
 
 /*--------------------------------------navigation bar --------------------------------------*/
 
-.navigation-bar ul{
+.navigation-bar ul {
     width: 90%;
     align-items: center;
-    height: auto; 
-    margin-left: 120px; 
+    height: auto;
+    margin-left: 120px;
     padding: 6px 0 6px 0;
     background-color: burlywood;
     font-size: 20px;
@@ -164,14 +170,14 @@ footer {
     align-items: center;
     justify-content: space-evenly;
     border: 1px solid crimson;
-    border-radius: 12px; 
+    border-radius: 12px;
 }
 
-.navigation-bar ul li{
-    list-style-type: none;     
+.navigation-bar ul li {
+    list-style-type: none;
 }
 
-.navigation-bar ul li a{
+.navigation-bar ul li a {
     text-decoration: none;
     color: black;
     font-weight: bold;
@@ -215,7 +221,7 @@ footer {
 
 /* Show the dropdown options on hover */
 #login-dropdown:hover ul.dropdown {
-    display:inline;
+    display: inline;
     height: auto;
     width: auto;
 }
@@ -226,24 +232,24 @@ footer {
     margin: 10px auto 120px auto;
     border: 2px solid #558B2F;
     border-radius: 15px;
-    width: 75%;  
+    width: 75%;
     padding-top: 10px;
     padding-right: 40px;
     padding-left: 40px;
     padding-bottom: 30px;
     height: 600px;
-    background-color: antiquewhite; 
+    background-color: antiquewhite;
 }
 
-.itemsContainer p{
+.itemsContainer p {
     color: #030000;
     text-align: justify;
 }
 
-.itemsContainer h2{
-    color:#558B2F;
+.itemsContainer h2 {
+    color: #558B2F;
     text-align: justify;
-    text-decoration:underline;
+    text-decoration: underline;
     font-style: italic;
 }
 
@@ -253,28 +259,29 @@ footer {
     margin: 10px auto 120px auto;
     border: 2px solid #558B2F;
     border-radius: 15px;
-    width: 75%;  
+    width: 75%;
     padding-top: 10px;
     padding-right: 40px;
     padding-left: 40px;
     padding-bottom: 30px;
-    height:auto;
-    background-color: antiquewhite; 
+    height: auto;
+    background-color: antiquewhite;
 }
 
-.itemsContainerVacc p{
+.itemsContainerVacc p {
     color: #030000;
     text-align: justify;
 }
 
-.itemsContainerVacc h2{
-    color:#558B2F;
+.itemsContainerVacc h2 {
+    color: #558B2F;
     text-align: justify;
     font-style: italic;
     font-size: 30px;
     text-align: center;
 }
-#vaccImp{
+
+#vaccImp {
     text-align: justify;
     font-size: 17px;
 }
@@ -287,60 +294,64 @@ footer {
     border: 2px dotted crimson;
     border-radius: 10px;
     background-color: antiquewhite;
-    height:400px;
+    height: 400px;
     padding-top: 50px;
 }
 
-.container1  h2 {
+.container1 h2 {
     color: black;
 }
+
 .subtitle {
     font-size: 18px;
     margin-bottom: 20px;
     color: black;
 }
+
 .card {
-    background-color:burlywood;
+    background-color: burlywood;
     color: #333;
     padding: 20px;
     border-radius: 10px;
     margin: 10px;
     display: inline-block;
 }
+
 .icon {
     font-size: 24px;
     margin-bottom: 10px;
 }
+
 .cta-button {
     background-color: #0074D9;
     color: #ffffff;
     border: none;
     padding: 10px 20px;
 }
-   
+
 /*--------------------------------------Registration pages--------------------------------------*/
 
 .regContainer {
     margin: 10px auto 120px auto;
     border: 2px solid #558B2F;
     border-radius: 15px;
-    width: 75%;  
+    width: 75%;
     padding-top: 10px;
     padding-right: 40px;
     padding-left: 40px;
     padding-bottom: 30px;
     height: 600px;
-    background-color: antiquewhite; 
+    background-color: antiquewhite;
 }
 
-.regContainer h2{
-    color:#558B2F;
+.regContainer h2 {
+    color: #558B2F;
     text-align: justify;
-    font-style:normal;
+    font-style: normal;
     text-align: center;
 }
 
-.regContainer form{
+.regContainer form {
     color: black;
 }
 
@@ -350,13 +361,14 @@ footer {
     margin-right: 5%;
 }
 
-.regContainer  input, select {
+.regContainer input,
+select {
     padding: 8px;
     margin-bottom: 10px;
     box-sizing: border-box;
 }
 
-.regContainer  button {
+.regContainer button {
     width: 10%;
     padding: 10px;
     background-color: #4CAF50;
@@ -371,76 +383,78 @@ footer {
 
 
 
-#childVaccinationForm{
+#childVaccinationForm {
     color: #000000;
 }
 
-.child-details{
+.child-details {
     display: flex;
 }
 
 /*--------------------------------------Parent Home page----------------------------------*/
-.parentHomeLogin{
-    color: #000000;
-}
-.itemsContainer-parent {
-    border: 2px solid #558B2F;
-    border-radius: 15px;
-    width: 75%;  
-    padding-right: 40px;
-    padding-left: 40px;
-    height: 200px;
-    background-color: antiquewhite; 
-    display: inline-flex;
-    justify-content: space-around; 
+.parentHomeLogin {
     color: #000000;
 }
 
-.itemsContainer-parent p{
+.itemsContainer-parent {
+    border: 2px solid #558B2F;
+    border-radius: 15px;
+    width: 75%;
+    padding-right: 40px;
+    padding-left: 40px;
+    height: 200px;
+    background-color: antiquewhite;
+    display: inline-flex;
+    justify-content: space-around;
+    color: #000000;
+}
+
+.itemsContainer-parent p {
     color: #030000;
     text-align: justify;
 }
 
-.itemsContainer-parent h2{
-    color:#558B2F;
+.itemsContainer-parent h2 {
+    color: #558B2F;
     text-align: justify;
-    text-decoration:underline;
+    text-decoration: underline;
     font-style: italic;
 }
 
 .itemsContainer-child {
     border: 2px solid #558B2F;
     border-radius: 15px;
-    width: 75%;  
+    width: 75%;
     padding-right: 40px;
     padding-left: 40px;
     height: auto;
-    background-color: antiquewhite; 
+    background-color: antiquewhite;
     display: inline-flex;
     text-align: center;
 }
 
-.itemsContainer-child p{
+.itemsContainer-child p {
     color: #030000;
     text-align: justify;
 }
 
-.itemsContainer-child h2{
-    color:#558B2F;
+.itemsContainer-child h2 {
+    color: #558B2F;
     text-align: justify;
-    text-decoration:underline;
-}
-.itemsContainer-child ul{
-   list-style-type: none;
-   margin:auto;
+    text-decoration: underline;
 }
 
-.modification-Options{
+.itemsContainer-child ul {
+    list-style-type: none;
+    margin: auto;
+}
+
+.modification-Options {
     display: flex;
     justify-content: space-between;
 }
 
-.add_child_button h2{
+.add_child_button h2 {
     margin: 0;
     text-align: center;
     margin-left: 45%;
@@ -452,58 +466,104 @@ footer {
     color: black;
     font-weight: bold;
     background-color: burlywood;
-    
+
 }
 
-.add_child_button{
+.add_child_button {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.actualVacciantions{
+
+.actualVacciantions {
     color: black;
     text-align: left;
     padding-left: 25px;
 }
 
 /*--------------------------------------Addvaccination----------------------------------*/
-.itemsContainer-addvaccination{
+.itemsContainer-addvaccination {
     color: #000000;
 }
 
 
-.addvaccinationDetails{
-   
+.addvaccinationDetails {
+
     align-items: center;
     justify-content: space-around;
     border: 2px solid #558B2F;
     border-radius: 15px;
-    width: 78%;  
+    width: 78%;
     padding: 25px;
     height: auto;
-    background-color: antiquewhite; 
+    background-color: antiquewhite;
     display: inline-flex;
-    justify-content: space-around; 
+    justify-content: space-around;
     color: #000000;
 }
 
 
 
 /* vaccinationRecords is the parent of addvaccinationDetails */
-.vaccinationRecords{
+.vaccinationRecords {
     content: "Vaccination Records";
     font-size: large;
     font-style: italic;
     color: #000000;
 }
 
-.adminLoginHome{
+.adminLoginHome {
     border: 3px solid #9a0707;
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 20px;
     color: black;
 }
+
 .line {
-    border-bottom: 1px solid #600d0d; /* Add a border line after each row */
+    border-bottom: 1px solid #600d0d;
+    /* Add a border line after each row */
+}
+
+
+/* Adult Login home */
+.adultHomeLogin {
+    color: #000000;
+    margin-bottom: 80px;
+}
+
+.itemsContainer-adult {
+    border: 2px solid #558B2F;
+    border-radius: 15px;
+}
+.adultBody {
+    border-radius: 15px;
+    width: 75%;
+    padding-right: 40px;
+    padding-left: 40px;
+    height: 200px;
+    background-color: antiquewhite;
+    display: inline-flex;
+    justify-content: space-around;
+    color: #000000;
+    text-align: left;
+    font-size: large;
+    margin-bottom: 10px;
+}
+
+.itemsContainer-parent p {
+    color: #030000;
+    text-align: justify;
+}
+
+.itemsContainer-parent h2 {
+    color: #558B2F;
+    text-align: justify;
+    text-decoration: underline;
+    font-style: italic;
+}
+
+.buttonContainer{
+    display: ruby-text;
+    margin-bottom: 10px;
 }
