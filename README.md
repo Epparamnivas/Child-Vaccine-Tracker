@@ -1,20 +1,31 @@
-# Child Vaccine Tracker – Forked by Ramnivas Eppa
+# Child Vaccine Tracker – College Project by Ramnivas Eppa and CO
 
-This is my personal fork of the **Child Vaccine Tracker** project originally created by [@akhilgaddam99](https://github.com/akhilgaddam99). 
-The application is designed to help parents track vaccination schedules for their children, send reminders, and store vaccination history securely.
+This repository is a forked and enhanced version of the original [Child Vaccine Tracker](https://github.com/akhilgaddam99/Child-Vaccine-Tracker) project. Developed as part of my academic coursework, this application helps parents manage and track their children's vaccination schedules effectively.
 
-## 🔧 My Contributions
-As part of my contribution to this open-source project, I have:
-- Enhanced the frontend user interface using HTML/CSS and EJS templating.
-- Integrated backend modules in Node.js and Express.js for user authentication and profile management.
-- Fixed bugs related to alert scheduling and form validation.
-- Improved responsiveness for mobile views.
+## 🎓 College Project Info
+- Institution: Conestoga College, Guelph Canada
+- Course: Computer Application Development
+- Project Type: Academic Full-Stack Web Application
+- Role: Full Stack Backend Developer (Team member)
+- Technologies Used: Node.js, Express.js, MongoDB, EJS, HTML/CSS, JavaScript
 
+## 🧠 What It Does
+- User registration and login system
+- Profile management for children and parents
+- Vaccine schedule tracking and reminders
+- Responsive user interface
 
-## 📂 Original Repository
-Forked from: [https://github.com/akhilgaddam99/Child-Vaccine-Tracker](https://github.com/akhilgaddam99/Child-Vaccine-Tracker)
+## 💼 My Contributions
+- Developed login/signup and session management using Express
+- Created EJS templates for the dashboard and profile pages
+- Integrated MongoDB schema for child and vaccine data
+- Handled form validation and mobile responsiveness
 
-## 📬 Contact
-**Ramnivas Eppa**  
+## 📁 Original Repository 
+Forked from: [akhilgaddam99/Child-Vaccine-Tracker](https://github.com/akhilgaddam99/Child-Vaccine-Tracker)
+
+## 📬 Contact Me
+Ramnivas Eppa  
 GitHub: [@RamnivasEppa](https://github.com/RamnivasEppa)  
+Email: epparamnivas121@gmail.com 
 LinkedIn: [linkedin.com/in/ramnivas-eppa](https://www.linkedin.com/in/ramnivaseppa/)
